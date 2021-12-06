@@ -4,11 +4,13 @@ To add images, replace `tutheaderbl1.png` with the file name of any image you up
 
 ### Tutorial Aims
 
-#### <a href="#section1"> 1. The first section</a>
+#### <a href="#Multiple Regression Revision"> 1. Multiple Regression Revision</a>
 
-#### <a href="#section2"> 2. The second section</a>
+#### <a href="#Hierarchial Regression Analysis - What is it?"> 2. Hierarchial Regression Analysis - What is it? </a>
 
-#### <a href="#section3"> 3. The third section</a>
+#### <a href="#When to use HRA?"> 3. When to use HRA? </a>
+
+#### <a href="#When to use HRA?"> 3. When to use HRA? </a>
 
 You can read this text, then delete it and replace it with your text about your tutorial: what are the aims, what code do you need to achieve them?
 ---------------------------
