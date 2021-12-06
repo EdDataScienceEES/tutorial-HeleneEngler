@@ -11,6 +11,12 @@ To add images, replace `tutheaderbl1.png` with the file name of any image you up
 #### <a href="#When to use HRA?"> 3. When to use HRA? </a>
 
 #### <a href="#When to use HRA?"> 3. When to use HRA? </a>
+##### <a href="Setting a Research question"> - Setting a Research question </a>
+##### <a href="Requirements/Assumptions"> - Requirements </a>
+
+#### <a href="#Selection Procedure"> 3. Selection Procedure? </a>
+
+#### <a href="#When to use HRA?"> 3. When to use HRA? </a>
 
 You can read this text, then delete it and replace it with your text about your tutorial: what are the aims, what code do you need to achieve them?
 ---------------------------
