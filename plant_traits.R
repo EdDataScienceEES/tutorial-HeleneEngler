@@ -1,22 +1,19 @@
-##Stepwise regression Analysis 
-#Loading required R packages
+#Stepwise regression Analysis Tutorial 
+## by Helene Engler 
 
-library(tidyverse)  #Data manipulation and visualization
-library(caret)      #Machine learning workflow
-library(leaps)      #Computing stepwise regression
-library(ggplot2)    #Data visualisation 
-library(dplyr)      #Data manipulation and visualization
-library(lme4)       #Linear Models 
-library(janitor)    #Data cleaning
-library(olsrr)
-library(devtools)
-library(MASS)       #StepAIC
-library(stats)
-#install.packages("stats")
-#install.packages("MASS")
+#Loading required R packages ----
+library(tidyverse)  # Data manipulation and visualization
+library(ggplot2)    # Data visualisation 
+library(lme4)       # Linear Models 
+library(janitor)    # Data cleaning
+library(olsrr)      # Stepwise regression analsysis
+
+##Install necessary packages
+#install.packages("tidyverse")
+#install.packages("ggplot2")
+#install.packages("lme4")
+#install.packages("janitor")
 #install.packages("olsrr")
-#install.packages("leaps")
-#install.packages("lcaret")
 
 # Set your Working Directory 
 setwd("/Users/HeleneEngler/University/R/tutorial-HeleneEngler")
@@ -24,24 +21,28 @@ setwd("/Users/HeleneEngler/University/R/tutorial-HeleneEngler")
 # Load Data ----
 traits <- read.csv("plant_traits.csv")
 
-# Explore Data Frame (df)
+# Explore Data Frame (df) ----
 str(traits)
 
-# Check data distribution ----
-## Plot Histogram in basic R 
+## Check data distribution
+### Plot Histogram in basic R 
 hist(traits$height, breaks = 10) # non normal distribution, right skew 
 
-### Log transforming data 
+### Log transforming data, to achieve normal distribution
 traits <-  traits %>%
   mutate(log.ht = log(height))
-hist(traits$log.ht, breaks = 10) 
 
-## Plot Histogram with ggplot2
+#### Check log distribtuion 
+hist(traits$log.ht, breaks = 10) # close to normal 
+
+#### Plot Histogram with ggplot2
 ggplot(traits, aes(x=log.ht)) + 
-  geom_histogram(bins = 30)      # Plotted this way distribution looks less normal
+  geom_histogram(bins = 30)     
 
 ### Shapiro test 
 shapiro.test(traits$log.ht)       # p < 0.05 indicates non-normal distribuion
+# but usually linear models are not too sensitive, we will push on and look at the residuals
+# to determine if assumptions have been met 
 
 # Linear model creation ----
 ## Null model 
@@ -49,10 +50,18 @@ model.null <- lm(log.ht ~ 1, data=traits)
 
 ## Simplest model
 model.1 <- lm(log.ht ~ temp, data=traits)
+
 ### Check predcitive power 
 AIC(model.null, model.1)
 
-#### Add on 
+### Check if assumptions are met 
+resid1 <-  resid(model.1)
+plot(resid1)                # Equal variance, no observable patterns
+plot(model.1)               # Model assumptions are met, some outliers, 
+                            # but none outside Cook´s distance (residuls vs leverage)
+shapiro.test(resid1)        # p > 0.05, normally distributed residuals
+
+#### Add on to the model
 model.2 <- lm(log.ht ~ temp + rain, data=traits) # Include rain
 AIC(model.null, model.1, model.2)                # Addition of rain improves model
 
@@ -65,19 +74,25 @@ AIC(model.null, model.1, model.3, model.4)                    # Hemisphere impro
 # Stepwise regression analysis ----
 ## Define null model
 null.model <- lm(log.ht ~ 1, data=traits)
-## Define model with all predictors
-all <- lm(log.ht ~ ., data=traits)
-forward <- step(null.model, direction='forward', scope=formula(all), trace=0)
 
-# View results of forward stepwise regression
-forward$anova
-str(traits)
+## Define model with all predictors that may influence the dependent variable
 step.model <- lm(log.ht ~ alt + temp + rain + LAI + NPP + hemisphere, data=traits)
-SRA <-ols_step_all_possible(step.model)
+#all <- lm(log.ht ~ ., data=traits) --> this way all variables will be checked
+# here there are a lot, many more than 2 cathegories (not possible), 
+# it takes a long time to compute too many variables
 
+### SRA with olsrr package
+SRA <-ols_step_all_possible(step.model)
 SRA
 plot(SRA)
+
+#### to compare AIC
 ols_step_best_subset(step.model)
 
 
-
+### Forward selection process 
+forward <- step(null.model, direction='forward', scope=formula(all), trace=0)
+### Backward selection process 
+backward <- step(null.model, direction='backward', scope=formula(all), trace=0)
+### Forward & Backward selection process 
+both <- step(null.model, direction='both', scope=formula(all), trace=0)
