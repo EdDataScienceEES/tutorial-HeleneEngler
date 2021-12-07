@@ -22,7 +22,10 @@ setwd("/Users/HeleneEngler/University/R/tutorial-HeleneEngler")
 traits <- read.csv("plant_traits.csv")
 
 # Explore Data Frame (df) ----
+head(traits)
 str(traits)
+nrow(traits)
+ncol(traits)
 
 ## Check data distribution
 ### Plot Histogram in basic R 
@@ -48,7 +51,7 @@ shapiro.test(traits$log.ht)       # p < 0.05 indicates non-normal distribuion
 ## Null model 
 model.null <- lm(log.ht ~ 1, data=traits)
 
-## Simplest model
+## Simple univariate model
 model.1 <- lm(log.ht ~ temp, data=traits)
 
 ### Check predcitive power 
