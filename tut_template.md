@@ -1,8 +1,8 @@
-![1*MhBiZM1iUOZnZuLXc40RNA](https://user-images.githubusercontent.com/91228202/144902568-80c872b4-d2dd-4a0d-98d6-0b2bb980e7a3.png)</center>
+![AdobeStock_102891724-658317-edited](https://user-images.githubusercontent.com/91228202/145046505-2f0455c5-51ae-4aba-8a35-8f6d6b25f396.jpeg)</center>
 
 ### Tutorial Aims
 
-#### <a href="Multiple Regression Revision"> 1. Multiple Regression Revision</a>
+#### <a href="From linear models to hierarchical regression analysis"> 1. From linear models to hierarchical regression analysis</a>
 
 #### <a href="Hierarchial Regression Analysis - What is it?"> 2. Hierarchial Regression Analysis - What is it? </a>
 
@@ -28,29 +28,58 @@
 #### <a href="Challenge"> 10. Challenge </a>
 
 ---------------------------
-We are using `<a href="#section_number">text</a>` to create anchors within our text. For example, when you click on section one, the page will automatically go to where you have put `<a name="section_number"></a>`.
+This tutorial is designed for R users who want to learn how to use **hierarchical and stepwise regression analysis**, to **identify significant and powerful predictors** influencing your explanatory variable from a bigger number of potential variables. 
 
-To create subheadings, you can use `#`, e.g. `# Subheading 1` creates a subheading with a large font size. The more hashtags you add, the smaller the text becomes. If you want to make text bold, you can surround it with `__text__`, which creates __text__. For italics, use only one understore around the text, e.g. `_text_`, _text_.
+To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant [Coding Club tutorials](https://ourcodingclub.github.io/tutorials.html) linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as [ANOVA](https://ourcodingclub.github.io/tutorials/anova/) and [linear modelling in R](https://ourcodingclub.github.io/tutorials/model-design/), before attempting these slightly more advanced statistical tests. 
 
-# Subheading 1
-## Subheading 2
-### Subheading 3
+{% capture callout %}
+All the files you need to complete this tutorial can be downloaded from [this repository](https://github.com/ourcodingclub/CC-anova). Click on `Code/Download ZIP` and unzip the folder, or clone the repository to your own GitHub account.
+{% endcapture %}
+{% include callout.html content=callout colour = alert %}
 
-(This is some introductory text for your tutorial.) This tutorial is designed for R users who want to learn how to use hierarchical and stepwise regression analysis, to identify significant and powerful predictors influencing your explanatory variable from a bigger number of potential variables. 
+<a name="1. From linear models to hierarchical regression analysis"></a>
 
-To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant Coding Club tutorials linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as anova or linear modelling in R, before attempting these slightly more advanced statistical tests. 
+## 1. From linear models to hierarchical regression analysis
+The relationship between a dependent (or response) variable and an independent variable (also called 'predictors', 'covariates', 'explanatory variables' or 'features') can be estimated/modelled with regression analysis. Linear regression is used to find a linear line which fits the most data points according to a specific mathematical criterion.
+Such linear regressions have significant limits, not only because the predictions can only be made in a linear fashion, but most importantly it can only fit data sets with one dependent and one independent variable. This is where multiple regression comes in: with linear regression a linear line of best fit can be used to predict the relationship of a dependent and multiple independent variables. Such regression variables can become increasingly more complex, and often convoluted, as more and more explanatory variables are added. 
+Furthermore, they can become exceedingly convoluted when things such as polynomials and interactions are explored. 
+Thus it is important to identify the parameters wich actually influence the dependent variable and make a significant statistical contribution to our model. This selection process shuld always be based on scientific reasoning and an understanding of the theory of the system studied. But once a sensible subset of parameters has been narrowed down, hierarchical regression analysis (HRA), can be used to compare successive regression models and to determine the significance that each one has above and beyond the others. This tutorial will explore how the basic HLR process can be conducted in R
 
-If you want to go on to explore HRA/SRA, good luck. If you have any questions or suggestions, please don’t hesitate to contact me at: m.helene.engler@gmail.com 
+(not to be confused with hierarchical modelling, which is a used to delineate the relationship of nested explanatory data and a response variable)
 
+**Enoutgh theory for now, lets start coding!**  
+You can open a new R script, set your working direcory and load the libraries we will need:
+```
+#Loading required R packages ----
+library(tidyverse)  # Data manipulation and visualization
+library(ggplot2)    # Data visualisation 
+library(lme4)       # Linear Models 
+library(janitor)    # Data cleaning
+library(olsrr)      # Stepwise regression analsysis
 
-Explain the skills that will be learned and why they are important. Set the tutorial in context.
+##Install necessary packages
+#install.packages("tidyverse")
+#install.packages("ggplot2")
+#install.packages("lme4")
+#install.packages("janitor")
+#install.packages("olsrr")
 
-You can get all of the resources for this tutorial from <a href="https://github.com/ourcodingclub/CC-EAB-tut-ideas" target="_blank">this GitHub repository</a>. Clone and download the repo as a zip file, then unzip it.
+# Set your Working Directory 
+setwd("/Users/HeleneEngler/University/R/tutorial-HeleneEngler")
+```
+We will use a data on plant traits collected around the world: 
 
-<a name="section1"></a>
+```
+# Load Data ----
+traits <- read.csv("plant_traits.csv")
 
-## 1. The first section
-
+# Explore Data Frame (df) ----
+head(traits)
+str(traits)
+nrow(traits)
+ncol(traits)
+```
+Our goal is to identify the best predictors for plant height out of the 35 possible predictor variables included in the data set. 
 
 At the beginning of your tutorial you can ask people to open `RStudio`, create a new script by clicking on `File/ New File/ R Script` set the working directory and load some packages, for example `ggplot2` and `dplyr`. You can surround package names, functions, actions ("File/ New...") and small chunks of code with backticks, which defines them as inline code blocks and makes them stand out among the text, e.g. `ggplot2`.
 
