@@ -1,24 +1,32 @@
 ![1*MhBiZM1iUOZnZuLXc40RNA](https://user-images.githubusercontent.com/91228202/144902568-80c872b4-d2dd-4a0d-98d6-0b2bb980e7a3.png)</center>
 
-To add images, replace `tutheaderbl1.png` with the file name of any image you upload to your GitHub repository.
-
 ### Tutorial Aims
 
-#### <a href="#Multiple Regression Revision"> 1. Multiple Regression Revision</a>
+#### <a href="Multiple Regression Revision"> 1. Multiple Regression Revision</a>
 
-#### <a href="#Hierarchial Regression Analysis - What is it?"> 2. Hierarchial Regression Analysis - What is it? </a>
+#### <a href="Hierarchial Regression Analysis - What is it?"> 2. Hierarchial Regression Analysis - What is it? </a>
 
-#### <a href="#When to use HRA?"> 3. When to use HRA? </a>
+#### <a href="When to use HRA?"> 3. When to use HRA? </a>
 
-#### <a href="#When to use HRA?"> 3. When to use HRA? </a>
+#### <a href="When to use HRA?"> 4. When to use HRA? </a>
 ##### <a href="Setting a Research question"> - Setting a Research question </a>
 ##### <a href="Requirements/Assumptions"> - Requirements </a>
 
-#### <a href="#Selection Procedure"> 3. Selection Procedure? </a>
+#### <a href="Model Selection"> 5. Model Selection </a>
+##### <a href="Comparison Criteria"> - Comparison Criteria </a>
+##### <a href="Forewards & Backwards"> - Forewards & Backwards </a>
+##### <a href="Evaluating your results "> - Evaluating your results  </a>
 
-#### <a href="#When to use HRA?"> 3. When to use HRA? </a>
+#### <a href="When to use HRA?"> 6. When to use HRA? </a>
 
-You can read this text, then delete it and replace it with your text about your tutorial: what are the aims, what code do you need to achieve them?
+#### <a href="Stepwise regression analysis"> 7. Stepwise regression analysis </a>
+
+#### <a href="HRA and SRA: Benefits and Drawbacks"> 8. HRA and SRA: Benefits and Drawbacks </a>
+
+#### <a href="Additonal Code: Visualizing Predictions"> 9. Additonal Code: Visualizing Predictions </a>
+
+#### <a href="Challenge"> 10. Challenge </a>
+
 ---------------------------
 We are using `<a href="#section_number">text</a>` to create anchors within our text. For example, when you click on section one, the page will automatically go to where you have put `<a name="section_number"></a>`.
 
@@ -28,7 +36,14 @@ To create subheadings, you can use `#`, e.g. `# Subheading 1` creates a subheadi
 ## Subheading 2
 ### Subheading 3
 
-This is some introductory text for your tutorial. Explain the skills that will be learned and why they are important. Set the tutorial in context.
+(This is some introductory text for your tutorial.) This tutorial is designed for R users who want to learn how to use hierarchical and stepwise regression analysis, to identify significant and powerful predictors influencing your explanatory variable from a bigger number of potential variables. 
+
+To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant Coding Club tutorials linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as anova or linear modelling in R, before attempting these slightly more advanced statistical tests. 
+
+If you want to go on to explore HRA/SRA, good luck. If you have any questions or suggestions, please don’t hesitate to contact me at: m.helene.engler@gmail.com 
+
+
+Explain the skills that will be learned and why they are important. Set the tutorial in context.
 
 You can get all of the resources for this tutorial from <a href="https://github.com/ourcodingclub/CC-EAB-tut-ideas" target="_blank">this GitHub repository</a>. Clone and download the repo as a zip file, then unzip it.
 
