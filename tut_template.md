@@ -4,11 +4,7 @@
 
 #### <a href="From linear models to hierarchical regression analysis"> 1. From linear models to hierarchical regression analysis</a>
 
-#### <a href="Hierarchial Regression Analysis - What is it?"> 2. Hierarchial Regression Analysis - What is it? </a>
-
-#### <a href="When to use HRA?"> 3. When to use HRA? </a>
-
-#### <a href="When to use HRA?"> 4. When to use HRA? </a>
+#### <a href="When to use HRA?"> 2. When to use HRA? </a>
 ##### <a href="Setting a Research question"> - Setting a Research question </a>
 ##### <a href="Requirements/Assumptions"> - Requirements </a>
 
@@ -48,7 +44,11 @@ Thus it is important to identify the parameters wich actually influence the depe
 (not to be confused with hierarchical modelling, which is a used to delineate the relationship of nested explanatory data and a response variable)
 
 **Enoutgh theory for now, lets start coding!**  
+
+<a name="2. When to use HRA?"></a>
+## 2. Hierarchical regression analysis
 You can open a new R script, set your working direcory and load the libraries we will need:
+
 ```
 #Loading required R packages ----
 library(tidyverse)  # Data manipulation and visualization
@@ -81,52 +81,93 @@ ncol(traits)
 ```
 Our goal is to identify the best predictors for plant height out of the 35 possible predictor variables included in the data set. 
 
-At the beginning of your tutorial you can ask people to open `RStudio`, create a new script by clicking on `File/ New File/ R Script` set the working directory and load some packages, for example `ggplot2` and `dplyr`. You can surround package names, functions, actions ("File/ New...") and small chunks of code with backticks, which defines them as inline code blocks and makes them stand out among the text, e.g. `ggplot2`.
-
-When you have a larger chunk of code, you can paste the whole code in the `Markdown` document and add three backticks on the line before the code chunks starts and on the line after the code chunks ends. After the three backticks that go before your code chunk starts, you can specify in which language the code is written, in our case `R`.
-
-To find the backticks on your keyboard, look towards the top left corner on a Windows computer, perhaps just above `Tab` and before the number one key. On a Mac, look around the left `Shift` key. You can also just copy the backticks from below.
-
-```r
-# Set the working directory
-setwd("your_filepath")
-
-# Load packages
-library(ggplot2)
-library(dplyr)
+```
+*This data has already been cleaned and is in long format. If you are using your own data and need to do that check out this tutorial on data manipulation.*
 ```
 
-<a name="section2"></a>
+<a name="Setting a Research question"></a>
+### Setting a Research question 
+Setting a hypothesis before the statistical analysis of your data is always imperative for good science. Because HRA is used to find the best subset of predictors it is usually advisable to set a non-directional, rather than a directional hypothesis (also called experimental hypothesis). Using the plant data as an example, a non-directional hypothesis or research question could be: The best subset of parameters influencing/ predicting plant height will be identified. 
 
-## 2. The second section
+<a name="Requirements/Assumptions"></a>
+### Requirements/Assumptions
 
-You can add more text and code, e.g.
+## HRA Step by Step
+Once a subset of predictors has been identified through scientific reasoning, several approaches may be used: 
+Bottom up or top down 
 
-```r
-# Create fake data
-x_dat <- rnorm(n = 100, mean = 5, sd = 2)  # x data
-y_dat <- rnorm(n = 100, mean = 10, sd = 0.2)  # y data
-xy <- data.frame(x_dat, y_dat)  # combine into data frame
+Text Box 
+Bottom up= starting with the simplest possible version and adding more and more complexity
+Top down = starting with a model including all parameters and dropping parameters until the model fit does not improve further
+
+### Selection criteria 
+Models can be compared using a range of different criteria, such as R2, AIC, AICc, BIC or others 
+When comparing models the data has to have the same number of data points 
+Text Box
+-	AIC / AICc 
+-	R2 
+-	BIC
+
+Here we will use AIC (why) 
+
+### Step 1: Null Model 
+A null model (also called intercept only model) is the simplest possible model. It should be step before adding any other predictive terms, as a baseline to test if the change in predictive power through the addition of an explanatory variable is significantly dignificantly different from zero: 
+
+```
+## Null model 
+model.null <- lm(log.ht ~ 1, data=traits)
+```
+### Step 2: Add variables  
+Lets start with a simple model using only one parameter. The manual addition of parameters has to be based on scientific, ecological reasoning.  
+What variable is most likely to influence plant height? Temperature and rain are very likely to have a significant impact on plant height. So lets start by adding temperature: 
+
+```
+## Simple univariate model
+model.1 <- lm(log.ht ~ temp, data=traits)
+```
+So our first model delineates the influence of temperature on plant height.  
+First lets check if the assumptions have been met:
+*Note: If you don’t know how to analysie residual plots check out this website, which gives a pretty good explanation of how to interpret the 4 residual plots*
+
+```
+### Check if assumptions are met 
+resid1 <-  resid(model.1)
+plot(resid1)                # Equal variance, no observable patterns
+plot(model.1)               # Model assumptions are met, some outliers, 
+                            # but none outside Cook´s distance (residuls vs leverage)
+shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
 
-Here you can add some more text if you wish.
+The residuals are relatively normally distributed, there seems to be no obvious heteroscedacity or obnoxious outliers that absolutely have to be removed 
 
-```r
-xy_fil <- xy %>%  # Create object with the contents of `xy`
-	filter(x_dat < 7.5)  # Keep rows where `x_dat` is less than 7.5
+Now we can compare ´model.1´ to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
+
 ```
-
-And finally, plot the data:
-
-```r
-ggplot(data = xy_fil, aes(x = x_dat, y = y_dat)) +  # Select the data to use
-	geom_point() +  # Draw scatter points
-	geom_smooth(method = "loess")  # Draw a loess curve
+### Check predcitive power 
+AIC(model.null, model.1)
 ```
+The AIC of ´model.1´ is smaller than that of the null model, so we can keep temperature and add more parameters: 
 
-At this point it would be a good idea to include an image of what the plot is meant to look like so students can check they've done it right. Replace `IMAGE_NAME.png` with your own image file:
+```
+#### Add on to the model
+model.2 <- lm(log.ht ~ temp + rain, data=traits) # Include rain
+AIC(model.null, model.1, model.2)                # Addition of rain improves model
 
-<center> <img src="{{ site.baseurl }}/IMAGE_NAME.png" alt="Img" style="width: 800px;"/> </center>
+model.3 <- lm(log.ht ~ temp + rain + alt, data=traits) # Include altitude
+AIC(model.null, model.1, model.3, model.4)             # Altitude does not improve model fit, discard
+```
+After each addition we should recheck the AIC to determine if the parameter is a useful addition or if it should be excluded. As you can see the addition of altitude increases the AIC and it is therefore discarded from the model. 
+
+model.4 <- lm(log.ht ~ temp + rain + hemisphere, data=traits) # Include hemisphere
+AIC(model.null, model.1, model.3, model.4)                    # Hemisphere improves model
+
+As we have a big number of parameters, checking all possible combinations can take quite a long time. Thus we can use an automated computation process, that checks the models for us, step by step: **Stepwise Regression Analysis**
+
+Stepwise regression analysis 
+In hierarchical regression you decide which terms to enter at what stage, basing your decision on substantive knowledge and statistical expertise.
+In stepwise, you let the computer decide which terms to enter at what stage, telling it to base its decision on some criterion such as increase in 𝑅2R2, AIC, BIC and so on.
+When to use which? Use hierarchical regression when you have knowledge of the field in which you are building a model. As for stepwise... well, I am tempted to say "don't use it". If you must use an automated procedure, you should use one that penalizes models for complexity, such as LASSO or LAR. The problems of stepwise have been discussed here many times, searching for stepwise should find lots of posts.
+
 
 <a name="section1"></a>
 
