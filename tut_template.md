@@ -82,7 +82,7 @@ nrow(traits)
 ncol(traits)
 ```
 
-Our `research goal´ is to identify the best predictors for plant height out of the 35 possible predictor variables included in the data set. A non-directional `hypothesis´ (or study intention) could be frased as: *The best subset of parameters influencing/ predicting plant height will be identified.*
+Our **research goal** is to identify the best predictors for plant height out of the 35 possible predictor variables included in the data set. A non-directional **hypothesis** (or study intention) could be frased as: *The best subset of parameters influencing/ predicting plant height will be identified.*
 
 <a name="3.2 Checking assumptions"></a>
 ### 3.2 Checking assumptions  
@@ -210,122 +210,85 @@ As we have a big number of parameters, checking all possible combinations can ta
 ## 4. Stepwise regression analysis 
 http://90s90s90s.com/post/97737121690/codeinebeauty-love-this-episode-lol
 
-Models can be compared using a range of different criteria, such as R2, AIC, AICc, BIC or others 
-When comparing models the data has to have the same number of data points 
-Text Box
--	AIC / AICc 
--	R2 
--	BIC
+While in HRA you decide what terms to enter at which stage, stepwise regression analysis (SRA) is an automated process in which the program enters and discards terms based on the criterion you selected (e.g. R2, AIC, BIC). 
 
-Here we will use AIC (why) 
+There are many packages that can perform SRA in R. We will use ´ls_step from the ´olsrr´ package. 
 
-### Step 1: Null Model 
-A null model (also called intercept only model) is the simplest possible model. It should be step before adding any other predictive terms, as a baseline to test if the change in predictive power through the addition of an explanatory variable is significantly dignificantly different from zero: 
+The requirements for SRA are the same as for HRA. Thus the data distribution and residuals have to be checked! 
+
+First we define the model we want to evaluate. To include all parameters into the model it may be constructed like this: 
 
 ```
-## Null model 
-model.null <- lm(log.ht ~ 1, data=traits)
+all <- lm(log.ht ~ ., data=traits)
 ```
-### Step 2: Add variables  
-Lets start with a simple model using only one parameter. The manual addition of parameters has to be based on scientific, ecological reasoning.  
-What variable is most likely to influence plant height? Temperature and rain are very likely to have a significant impact on plant height. So lets start by adding temperature: 
+However, the plant traits data set includes parameters that are not of ecological importance, such as the person taking the measurements, and categorical parameters. While these can be included into regression models, this is a bit more complex and we will focus on continuous variables.  
+Thus a subset of variables to be tested can be defined: 
 
 ```
-## Simple univariate model
-model.1 <- lm(log.ht ~ temp, data=traits)
+step.model <- lm(log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm, data=traits)
 ```
-So our first model delineates the influence of temperature on plant height.  
-First lets check if the assumptions have been met:
-*Note: If you don’t know how to analysie residual plots check out this website, which gives a pretty good explanation of how to interpret the 4 residual plots*
+We can feed this model into the stepwise function we have selected now: 
 
-```
-### Check if assumptions are met 
-resid1 <-  resid(model.1)
-plot(resid1)                # Equal variance, no observable patterns
-plot(model.1)               # Model assumptions are met, some outliers, 
-                            # but none outside Cook´s distance (residuls vs leverage)
-shapiro.test(resid1)        # p > 0.05, normally distributed residuals
-```
+<a name="4.1 MASS package"></a>
+### 4.1 MASS package
+SRA can be performed forwards and backwards. **Forward** selection is a *bottom-up* approach where you start with no predictors and search through the single-variable models and then add variables, until we find the best model. **Backward** selection is the opposite approach. All predictors are included into the model and the predictors with the least statistical significance are dropped until the model with the lowest AIC is found. 
 
-The residuals are relatively normally distributed, there seems to be no obvious heteroscedacity or obnoxious outliers that absolutely have to be removed 
-
-Now we can compare ´model.1´ to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
+*Note: 
+Backward stepwise is generally better because starting with the full model has the advantage of considering the effects of all variables simultaneously.
+Unlike backward elimination, forward stepwise selection is more suitable in settings where the number of variables is bigger than the sample size. 
+So tldr: unless the number of candidate variables is greater than the sample size (such as dealing with genes), using a backward stepwise approach is default choice.
+*
+Most R SRA packages include a function for `both´, where selection carried out in both directions. This is what we will use here. 
+Including ´trace = TRUE´ prints out all the steps that R performs. 
 
 ```
-### Check predcitive power 
-AIC(model.null, model.1)
+step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")
 ```
-The AIC of ´model.1´ is smaller than that of the null model, so we can keep temperature and add more parameters: 
+The SRA comes to the same conclusion as we did. 
+
+<a name="4.1 olsrr package"></a>
+### 4.1 olsrr package
+Using the olsrr package is even more simple. It includes several functions for SRA, we will use ` ols_step_best_subset()´ which compares models based on their AIC and is also bi-directional. 
 
 ```
-#### Add on to the model
-model.2 <- lm(log.ht ~ temp + rain, data=traits) # Include rain
-AIC(model.null, model.1, model.2)                # Addition of rain improves model
-
-model.3 <- lm(log.ht ~ temp + rain + alt, data=traits) # Include altitude
-AIC(model.null, model.1, model.3, model.4)             # Altitude does not improve model fit, discard
+SRA <- ols_step_best_subset(step.model)
+SRA
 ```
-After each addition we should recheck the AIC to determine if the parameter is a useful addition or if it should be excluded. As you can see the addition of altitude increases the AIC and it is therefore discarded from the model. 
+We can visualise the change in AIC for each step with the ´plot()´ function. 
+```
+plot(SRA)
+```
+After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
 
-model.4 <- lm(log.ht ~ temp + rain + hemisphere, data=traits) # Include hemisphere
-AIC(model.null, model.1, model.3, model.4)                    # Hemisphere improves model
+<a name="5. HRA and SRA: Advantages and Drawbacks"></a>
+## 5. HRA and SRA: Advantages and Drawbacks 
 
-As we have a big number of parameters, checking all possible combinations can take quite a long time. Thus we can use an automated computation process, that checks the models for us, step by step: **Stepwise Regression Analysis**
+HRA has the advantage that you decide, based on scientific reasoning which parameters to include at what stage. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling. 
+While SRA is one of the most common methods used in ecological and environmental studies, is has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006). 
+Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered when you are evaluating your results are: 
+-	Parameter bias: parameter selection is based on testing whether parameters are significantly different from zero, this can lead to biases in parameters, over-fitting and incorrect significance tests. 
+-	Algorithm impacts: the algorithm used (forward selection, backward elimination or stepwise), the order of parameter entry (or deletion), and the number of candidate parameters, can all affect the selected model.  
+-	Collinearity:  cannot deal with intercorrelation of variables. Collinearity may lead to the program to disregard significant parameters
+-	Best  model selection: SRA aims to select the single best model, which is often not possible. Several viable options may exist 
+-	The use of p-values, F and Chi-squared tests and R2 values in SRA is problematic and may not present the actual statistical significance of parameters. 
 
-Stepwise regression analysis 
-In hierarchical regression you decide which terms to enter at what stage, basing your decision on substantive knowledge and statistical expertise.
-In stepwise, you let the computer decide which terms to enter at what stage, telling it to base its decision on some criterion such as increase in 𝑅2R2, AIC, BIC and so on.
-When to use which? Use hierarchical regression when you have knowledge of the field in which you are building a model. As for stepwise... well, I am tempted to say "don't use it". If you must use an automated procedure, you should use one that penalizes models for complexity, such as LASSO or LAR. The problems of stepwise have been discussed here many times, searching for stepwise should find lots of posts.
+Thus, SRA should only be used cautiously! 
+However, it is easily computed (now that you know how to) and may provide some supplementary insights into the data you are exploring. 
+
+<a name="6. Challenge"></a>
+## 6. Challenge
+If you haven’t had enough of HRA and SRA yet, you can try yourself at a data set from the [World Data Bank]() and find the best parameters to predict life expectancy. The data set, a starter script and solutions can be found in the linked [Github repository](). 
+
+<a name="7. Supplementary material "></a>
+## 7. Supplementary material 
+**Supplementary material and links can be found in the [Github repository]() linked to this tutorial. **  
+
+If you have any thoughts or questions, please contact me at m.helene.engler@ed.sms.ac.uk. 
+
+<a name="8. References"></a>
+## 8. References
+WHITTINGHAM, M.J., STEPHENS, P.A., BRADBURY, R.B. and FRECKLETON, R.P. (2006), Why do we still use stepwise modelling in ecology and behaviour?. Journal of Animal Ecology, 75: 1182-1189. https://doi.org/10.1111/j.1365-2656.2006.01141.x
 
 
-<a name="section1"></a>
 
-## 3. The third section
 
-More text, code and images.
-
-This is the end of the tutorial. Summarise what the student has learned, possibly even with a list of learning outcomes. In this tutorial we learned:
-
-##### - how to generate fake bivariate data
-##### - how to create a scatterplot in ggplot2
-##### - some of the different plot methods in ggplot2
-
-We can also provide some useful links, include a contact form and a way to send feedback.
-
-For more on `ggplot2`, read the official <a href="https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf" target="_blank">ggplot2 cheatsheet</a>.
-
-Everything below this is footer material - text and links that appears at the end of all of your tutorials.
-
-<hr>
-<hr>
-
-#### Check out our <a href="https://ourcodingclub.github.io/links/" target="_blank">Useful links</a> page where you can find loads of guides and cheatsheets.
-
-#### If you have any questions about completing this tutorial, please contact us on ourcodingclub@gmail.com
-
-#### <a href="INSERT_SURVEY_LINK" target="_blank">We would love to hear your feedback on the tutorial, whether you did it in the classroom or online!</a>
-
-<ul class="social-icons">
-	<li>
-		<h3>
-			<a href="https://twitter.com/our_codingclub" target="_blank">&nbsp;Follow our coding adventures on Twitter! <i class="fa fa-twitter"></i></a>
-		</h3>
-	</li>
-</ul>
-
-### &nbsp;&nbsp;Subscribe to our mailing list:
-<div class="container">
-	<div class="block">
-        <!-- subscribe form start -->
-		<div class="form-group">
-			<form action="https://getsimpleform.com/messages?form_api_token=de1ba2f2f947822946fb6e835437ec78" method="post">
-			<div class="form-group">
-				<input type='text' class="form-control" name='Email' placeholder="Email" required/>
-			</div>
-			<div>
-                        	<button class="btn btn-default" type='submit'>Subscribe</button>
-                    	</div>
-                	</form>
-		</div>
-	</div>
-</div>
