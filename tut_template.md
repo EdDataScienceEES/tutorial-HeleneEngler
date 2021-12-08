@@ -295,6 +295,9 @@ We can visualise the change in AIC for each step with the ´plot()´ function.
 ```
 plot(SRA)
 ```
+<p align="center"><img src="https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png" />
+<p align="center"> *Figure 3. Stepwise Regression Analysis to determine best subset for plant height.* </p>
+
 After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
 
 <a name="5. HRA and SRA: Advantages and Drawbacks"></a>
@@ -318,7 +321,7 @@ If you haven’t had enough of HRA and SRA yet, you can try yourself at a data s
 
 <a name="7. Supplementary material "></a>
 ## 7. Supplementary material 
-**Supplementary material and links can be found in the [Github repository]() linked to this tutorial. **  
+**Supplementary material and links can be found in the [Github repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler) linked to this tutorial. **  
 
 If you have any thoughts or questions, please contact me at m.helene.engler@ed.sms.ac.uk. 
 
@@ -326,6 +329,6 @@ If you have any thoughts or questions, please contact me at m.helene.engler@ed.s
 ## 8. References
 WHITTINGHAM, M.J., STEPHENS, P.A., BRADBURY, R.B. and FRECKLETON, R.P. (2006), Why do we still use stepwise modelling in ecology and behaviour?. Journal of Animal Ecology, 75: 1182-1189. https://doi.org/10.1111/j.1365-2656.2006.01141.x
 
-
+Feng, C., Wang, H., Lu, N., Chen, T., He, H., Lu, Y., & Tu, X. M. (2014). Log-transformation and its implications for data analysis. Shanghai archives of psychiatry, 26(2), 105–109. https://doi.org/10.3969/j.issn.1002-0829.2014.02.009
 
 
