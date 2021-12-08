@@ -92,6 +92,9 @@ plot(SRA)
 #### to compare AIC
 ols_step_best_subset(step.model)
 
+# MASS packacge 
+library(MASS)
+step_traits <- stepAIC(step.model, trace = TRUE, direction= "forward")
 
 ### Forward selection process 
 forward <- step(null.model, direction='forward', scope=formula(all), trace=0)
