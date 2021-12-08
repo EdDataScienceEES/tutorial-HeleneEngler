@@ -97,8 +97,8 @@ It is important to check if these assumptions apply to our data before you start
 
 So lets check the distribution of our dependent variable, plant height, with a histogram. 
 ```
-## Check data distribution
-### Plot Histogram in basic R 
+# Check data distribution
+## Plot Histogram in basic R 
 hist(traits$height, breaks = 10) # non normal distribution, right skew
 ```
 <p align="center">
@@ -108,11 +108,11 @@ hist(traits$height, breaks = 10) # non normal distribution, right skew
 We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. 2014 in the [resources folder]()). 
 
 ```
-### Log transforming data, to achieve normal distribution
+# Log transforming data, to achieve normal distribution
 traits <-  traits %>%
-  mutate(log.ht = log(height))
+  mutate(log.ht = log(height))   #create new collum with log[height]
 
-#### Check log distribtuion 
+# Check log distribtuion 
 hist(traits$log.ht, breaks = 10) # close to normal
 ```
 <p align="center"><img src="https://user-images.githubusercontent.com/91228202/145290312-9a44c8b6-deba-4920-9198-26513ce34dfe.png" />
@@ -139,7 +139,7 @@ To learn more about the adjusted R2 and how to use it, you can read [this blogpo
 For models with small sample sizes the AIC often selects models with too many parameters (overfitting). Thus the **AICc**, which is an AIC with a correction for small sample sizes, should be used when modelling small sample sizes. It invokes a greater penalty than AIC for each additional parameter estimated, which offers greater ‘protection’ against overfitting.* 
 
 **Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
--	*Find the model that gives the best prediction (without assuming that any of the models are correct) use AIC 
+-	*Find the model that gives the best prediction (without assuming that any of the models are correct) use AIC*  
 -	*Find the **true model**, with the assumptions that fit reality closest, use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)*
 ----
 
@@ -158,14 +158,14 @@ model.null <- lm(log.ht ~ 1, data=traits)
 Let´s start with a simple model using only one parameter. The manual addition of parameters has to be based on scientific, ecological reasoning: What variable is most likely to influence plant height? Temperature and rain are very likely to have a significant impact on plant height. So the first addition is temperature: 
 
 ```
-## Simple univariate model
+# Simple univariate model
 model.1 <- lm(log.ht ~ temp, data=traits)
 ```
 This first model delineates the influence of temperature on plant height.  
 Before we can go on to add more parameters, we should check if the assumptions of a linear regression have been met in this simple model. This can be done using the `resid()` and the `plot()` function. 
 
 ```
-#### Check if assumptions are met 
+# Check if assumptions are met 
 resid1 <-  resid(model.1)
 plot(resid1)                # Equal variance, no observable patterns
 plot(model.1)               # Model assumptions are met, some outliers, 
@@ -225,14 +225,14 @@ model.8     9 642.9715
 Warning message:
 In AIC.default(model.null, model.1, model.3, model.4, model.5, model.6,  :
   models are not all fitted to the same number of observations
-
+```
 
 Thus we have determined model.4 is has the best model fit.  
 > **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. To avoid this it can be helpful to clean your data first. This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
 
 Now we can check the residuals again to see if it meet the assumptions of linear regression. 
 ```
-#### Check residuals 
+# Check residuals 
 resid4 <-  resid(model.4)
 plot(resid1)                # Equal variance, no observable patterns
 plot(model.4)               # Model assumptions are met, some outliers (e.g.6,96,146)
