@@ -98,6 +98,6 @@ AIC(k)
 quine.stp <- stepAIC(LED15)
 quine.stp$anova
 
-library(BIEN)
+library(b)
 
 
