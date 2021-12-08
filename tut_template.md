@@ -3,33 +3,30 @@
 ### Tutorial Aims
 
 #### <a href="Tutorial Introduction"> 1. Tutorial Introduction </a>
-##### <a href="Learning Outcomes"> - Learning Outcomes </a>
-##### <a href="Requiremed Skills"> - Requiremed Skills </a>
+##### <a href="Learning Outcomes"> Learning Outcomes </a>
+##### <a href="Requiremed Skills"> Requiremed Skills </a>
 
 #### <a href="From linear models to hierarchical regression analysis"> 2. From linear models to hierarchical regression analysis </a>
 
 #### <a href="Hierarchical Regression Analysis"> 3. Hierarchical Regression Analysis </a>
-##### <a href="3.1 Setting a hypothesis"> - 3.1 Setting a hypothesis </a>
-##### <a href="3.2 Checking assumptions"> - 3.2 Checking assumptions </a>
+##### <a href="3.1 Setting a hypothesis"> 3.1 Setting a hypothesis </a>
+##### <a href="3.2 Checking assumptions"> 3.2 Checking assumptions </a>
 ##### <a href="3.3 Selection Approach "> 3.3 Selection Approach </a>
-##### <a href="3.4 Model Creation "> - 3.4 Model Creation </a>
+##### <a href="3.4 Model Creation "> 3.4 Model Creation </a>
 
 #### <a href="# Stepwise regression analysis "> 4. Stepwise regression analysis </a>
-##### <a href="Evaluating your results "> - Evaluating your results  </a>
 
-#### <a href="When to use HRA?"> 6. When to use HRA? </a>
+#### <a href="Stepwise regression analysis"> 5. Stepwise regression analysis </a>
+#### <a href="7.1 MASS package "> 5.1 MASS package </a>
+#### <a href="7.2 olsrr package "> 5.2 olsrr package </a>
 
-#### <a href="Stepwise regression analysis"> 7. Stepwise regression analysis </a>
-#### <a href="7.1 MASS package "> - 7.1 MASS package </a>
-#### <a href="7.2 olsrr package "> - 7.2 olsrr package </a>
+#### <a href="HRA and SRA: Advantages and Drawbacks"> 6. HRA and SRA: Advantages and Drawbacks </a>
 
-#### <a href="HRA and SRA: Advantages and Drawbacks"> 8. HRA and SRA: Advantages and Drawbacks </a>
+#### <a href="Challenge"> 7. Challenge </a>
 
-#### <a href="Challenge"> 9. Challenge </a>
+#### <a href="Additional Materials"> 8. Additional Materials </a>
 
-#### <a href="Additional Materials"> 10. Additional Materials </a>
-
-#### <a href="References"> 11. References </a>
+#### <a href="References"> 9. References </a>
 
 ---------------------------
 <a name="1. Introduction"></a>
@@ -38,15 +35,18 @@ This tutorial is designed for R users who want to learn how to use **hierarchica
 
 <a name="Learning Outcomes"></a>
 ### Learning Outcomes 
+**1. Understand what Multiple Regression is.**  
+**2. Learn what Hierarchical Regression Analysis is and when to use it.**   
+**3. Step-by-step introduction how to perform a Hierarchical Regression Analysis.**  
+**4. Learn what Stepwise Regression Analysis is and when to use it.**  
+**4. Compute a simple Stepwise Regression Analysis.**  
+**5. Advantages and Drawbacks of Hierarchical and Stepwise Regression Analysis, when to use them and when not to.**   
 
 <a name="Required Skills"></a>
 ### Required Skills 
 To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant [Coding Club tutorials](https://ourcodingclub.github.io/tutorials.html) linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as [ANOVA](https://ourcodingclub.github.io/tutorials/anova/) and [linear modelling in R](https://ourcodingclub.github.io/tutorials/model-design/), before attempting these slightly more advanced statistical tests. 
 
-{% capture callout %}
-All the material you need to complete this tutorial can be downloaded from [this repository](https://github.com/ourcodingclub/CC-anova). Click on `Code/Download ZIP` and unzip the folder, or clone the repository to your own GitHub account.
-{% endcapture %}
-{% include callout.html content=callout colour = alert %}
+> **_NOTE:_** *All the material you need to complete this tutorial can be downloaded from [this repository](https://github.com/ourcodingclub/CC-anova). Click on `Code` / `Download ZIP`and downloand and unzip the folder, or clone the repository to your R studio.*
 
 <a name="2. From linear models to hierarchical regression analysis"></a>
 ## 2. From linear models to hierarchical regression analysis
@@ -56,7 +56,7 @@ However, linear models only describe the relationship between one dependent and 
 While this allows the exploration of many factors that may influence a dependent variable, such models can become increasingly more complex, as more and more explanatory variables are added. When [interactions]() or [polynomials]() are included, things can become exceedingly. Thus it is important to identify the parameters which actually influence the dependent variable and make a significant statistical contribution to our model.
 While this selection process should always be based on **scientific reasoning** and an **understanding of the theory of the systems** studied, there are statistical methods that can help us with the selection process based on statistical criteria: Once a sensible subset of parameters has been narrowed down, hierarchical regression analysis (HRA), can be used to compare successive regression models and to determine the significance that each one has above and beyond the others. This tutorial will explore how the basic HRR process can be conducted in R. 
 
-*Note: Do not confuse hierarchical regression analysis with hierarchical modelling. Hierarchical modelling is a type of “multi-level modeling” which is a used to model data with a nested structure. [This website] explains the differences between hierarchical regression and modelling very well if you are still having trouble separating them.* 
+> **_NOTE:_** *Do not confuse hierarchical regression analysis with hierarchical modelling. Hierarchical modelling is a type of “multi-level modeling” which is a used to model data with a nested structure. [This website] explains the differences between hierarchical regression and modelling very well if you are still having trouble separating them.*
 
 <a name="3. Hierarchical Regression Analysis "></a>
 ## 3. Hierarchical Regression Analysis 
@@ -65,8 +65,8 @@ While this selection process should always be based on **scientific reasoning** 
 ### 3.1 Setting a hypothesis  
 Determining a research question and setting a hypothesis before the statistical analysis of your data is always imperative for good science. Because HRA is used to find the best subset of predictors it is usually advisable to set a non-directional, rather than a directional hypothesis (also called experimental hypothesis). 
 
-*Note: directional hypothesis: 
-Non-directional hypothesis: *
+> **_NOTE:_** *directional hypothesis: 
+Non-directional hypothesis:*
 
 In this tutorial we will use a data on plant traits collected around the world. You can download the data from [this github repository]() and import it into a new R script. 
 A bit of preliminary analysis shows that the plant traits data set contains 36 observations for 178 different plant species. 
@@ -114,13 +114,12 @@ hist(traits$log.ht, breaks = 10) # close to normal
 ```
 While the data still does not look perfectly normally distributed it should be fine for modelling. Perfect normal distributions are rare in environmental data and linear models are not that sensitive to slight abnormalities in distribution. However, it is important to check the residuals of the model we will build, to be able to prove the validity of your statistical method. 
 
-*Note: if you are not familiar with the different types of distributions, check out these sources* 
+> **_NOTE:_** *if you are not familiar with the different types of distributions, check out these sources* 
 
 <a name="3.3 Selection Approach"></a>
 ### 3.3 Selection Approach 
 Models can be compared using a range of different criteria, such as R2, AIC, AICc, BIC or others. It is important to consider your data and the goal of your model when choosing a selection criterion. measure of fit
 
-*Note: 
 **R-squared (R2)** quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as:
 
 <img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png"> </center>
@@ -136,7 +135,7 @@ For models with small sample sizes the AIC often selects models with too many pa
 ** Bayesian information criterion (BIC)** is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection: 
 -	Find the model that gives the best prediction (without assuming that any of the models are correct)  use AIC 
 -	Find the *true* model, with the assumptions that fit reality closest  use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)
-*
+
 It is often good practice to include both the AIC and the BIC into your model selection process, however for simplicities sake we will use the AIC, which is easily computed in R and includes a penalisation for. 
 
 <a name="3.4 Model Creation"></a>
@@ -201,8 +200,7 @@ plot(model.4)               # Model assumptions are met, some outliers (e.g.6,96
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid4)        # p>0.05 = normal distribution
 ```
-*Note 
-When comparing models be careful to make sure the same number of observations is used for each parameters, as some data sets have N/A values. To avoid this it can be helpful to clean your data first. This [CC tutorial]() teaches you how to do that.* 
+> **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters, as some data sets have N/A values. To avoid this it can be helpful to clean your data first. This [CC tutorial]() teaches you how to do that.* 
 
 As we have a big number of parameters, checking all possible combinations can take quite a long time. To make things faster we can use an automated computation process, that checks the models for us, step by step: **Stepwise Regression Analysis**
 
@@ -233,11 +231,8 @@ We can feed this model into the stepwise function we have selected now:
 ### 4.1 MASS package
 SRA can be performed forwards and backwards. **Forward** selection is a *bottom-up* approach where you start with no predictors and search through the single-variable models and then add variables, until we find the best model. **Backward** selection is the opposite approach. All predictors are included into the model and the predictors with the least statistical significance are dropped until the model with the lowest AIC is found. 
 
-*Note: 
-Backward stepwise is generally better because starting with the full model has the advantage of considering the effects of all variables simultaneously.
-Unlike backward elimination, forward stepwise selection is more suitable in settings where the number of variables is bigger than the sample size. 
-So tldr: unless the number of candidate variables is greater than the sample size (such as dealing with genes), using a backward stepwise approach is default choice.
-*
+> **_NOTE:_** *Forward stepwise selection is usually more suitable when the number of variables is bigger than the sample size.*
+
 Most R SRA packages include a function for `both´, where selection carried out in both directions. This is what we will use here. 
 Including ´trace = TRUE´ prints out all the steps that R performs. 
 
