@@ -1,4 +1,3 @@
-![AdobeStock_102891724-658317-edited](https://user-images.githubusercontent.com/91228202/145046505-2f0455c5-51ae-4aba-8a35-8f6d6b25f396.jpeg)</center>
 
 ### Tutorial Aims
 
@@ -102,7 +101,11 @@ So lets check the distribution of our dependent variable, plant height, with a h
 ### Plot Histogram in basic R 
 hist(traits$height, breaks = 10) # non normal distribution, right skew
 ```
-We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data (if you want to know more about when and why to log you data check [here]()). 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/91228202/145286937-c6a575be-5c3f-4a1c-82d9-846114322ffe.png" />
+<p align="center"> *Figure 1. Distribution of plant height(m).* </p>
+
+We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. 2014 in the [resources folder]()). 
 
 ```
 ### Log transforming data, to achieve normal distribution
@@ -112,9 +115,10 @@ traits <-  traits %>%
 #### Check log distribtuion 
 hist(traits$log.ht, breaks = 10) # close to normal
 ```
+
 While the data still does not look perfectly normally distributed it should be fine for modelling. Perfect normal distributions are rare in environmental data and linear models are not that sensitive to slight abnormalities in distribution. However, it is important to check the residuals of the model we will build, to be able to prove the validity of your statistical method. 
 
-> **_NOTE:_** *If you are not familiar with the different types of distributions, check out [this website]().* 
+> **_NOTE:_** *If you are not familiar with the different types of distributions, check out [this website](https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm).* 
 
 <a name="3.3 Selection Approach"></a>
 ### 3.3 Selection Approach 
@@ -200,6 +204,8 @@ plot(model.4)               # Model assumptions are met, some outliers (e.g.6,96
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid4)        # p>0.05 = normal distribution
 ```
+Analyse residuals: https://rpubs.com/iabrady/residual-analysis
+
 > **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters, as some data sets have N/A values. To avoid this it can be helpful to clean your data first. This [CC tutorial]() teaches you how to do that.* 
 
 As we have a big number of parameters, checking all possible combinations can take quite a long time. To make things faster we can use an automated computation process, that checks the models for us, step by step: **Stepwise Regression Analysis**
