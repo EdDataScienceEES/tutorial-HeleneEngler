@@ -115,10 +115,12 @@ traits <-  traits %>%
 #### Check log distribtuion 
 hist(traits$log.ht, breaks = 10) # close to normal
 ```
+<p align="center"><img src="https://user-images.githubusercontent.com/91228202/145290312-9a44c8b6-deba-4920-9198-26513ce34dfe.png" />
+<p align="center"> *Figure 2. Distribution of log[plant height(m)].* </p>
 
 While the data still does not look perfectly normally distributed it should be fine for modelling. Perfect normal distributions are rare in environmental data and linear models are not that sensitive to slight abnormalities in distribution. However, it is important to check the residuals of the model we will build, to be able to prove the validity of your statistical method. 
 
-> **_NOTE:_** *If you are not familiar with the different types of distributions, check out [this website](https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm).* 
+> **_NOTE:_** *If you are not familiar with the different types of distributions, have a look at this [website](https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm) or this [CC turotial](https://ourcodingclub.github.io/tutorials/modelling/).* 
 
 <a name="3.3 Selection Approach"></a>
 ### 3.3 Selection Approach 
@@ -139,8 +141,9 @@ For models with small sample sizes the AIC often selects models with too many pa
 **Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
 -	*Find the model that gives the best prediction (without assuming that any of the models are correct) use AIC 
 -	*Find the **true model**, with the assumptions that fit reality closest, use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)*
+----
 
-It is often good practice to include both the AIC and the BIC into your model selection process, however for simplicities sake we will use the AIC, which is easily computed in R and includes a penalisation for. 
+It is often good practice to include both the AIC and the BIC into your model selection process and compare their evaluation of the model. However for simplicities sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. 
 
 <a name="3.4 Model Creation"></a>
 ### 3.4 Model Creation 
@@ -159,7 +162,7 @@ Let´s start with a simple model using only one parameter. The manual addition o
 model.1 <- lm(log.ht ~ temp, data=traits)
 ```
 This first model delineates the influence of temperature on plant height.  
-Before we can go on to add more parameters, we should check if the assumptions of a linear regression have been met in this simple model:
+Before we can go on to add more parameters, we should check if the assumptions of a linear regression have been met in this simple model. This can be done using the `resid()` and the `plot()` function. 
 
 ```
 #### Check if assumptions are met 
@@ -169,14 +172,26 @@ plot(model.1)               # Model assumptions are met, some outliers,
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
-The residuals are relatively normally distributed, there seems to be no obvious heteroscedacity or obnoxious outliers that absolutely have to be removed.  To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value, this test is `significant´ (indicative of a normal distribution) if p > 0.05, which is the case for our data.  
+The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
+The degree of unequal variance (heteroscedacity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedactiy present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of th residuals are following a linear pattern. 
+To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is `significant´ (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.  
+
+> **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis)shows some good examples and explains the interpretation of residuals nicely.*
+
 Now we can compare ´model.1´ to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
 
 ```
-### Check predcitive power 
+# Check predcitive power 
 AIC(model.null, model.1)
 ```
-The AIC of ´model.1´ is smaller than that of the null model, so we can keep temperature and add more parameters: 
+This returns the AIC of the null model and `model.1`.
+```
+> AIC(model.null, model.1)
+           df      AIC
+model.null  2 719.5867
+model.1     3 671.2654
+```
+The AIC of `model.1` is smaller than that of the null model, so we can keep temperature and add more parameters: 
 
 ```
 # Add on to the model
@@ -191,11 +206,31 @@ model.8 <- lm(log.ht ~ temp + rain + hemisphere + LAI + alt + NPP + isotherm, da
 
 AIC(model.null, model.1, model.3, model.4, model.5, model.6, model.7, model.8)            
 ```
+> **_NOTE_**: *While it is generally better to keep the number of predictors as low as possible to avoid overfitting, a general rule to determine the maximum number of predictors used is the `rule of ten´: you should have at least 10 times as many data points as parameters you are trying to estimate.*  
+
 After we have build all the models we want to evaluate, we check their AIC to determine which parameters should be kept and do not add to the power of the model. 
-While it is generally better to keep the number of predictors as low as possible to avoid overfitting, a general rule to determine the maximum number of predictors used is the `rule of ten´: you should have at least 10 times as many data points as parameters you are trying to estimate. 
 
-Thus we have determined model.4 is has the best model fit. Now we can check the residuals again to see if it meet the assumptions of linear regression: 
+```
+> AIC(model.null, model.1, model.3, model.4, model.5, model.6, model.7, model.8)                
+           df      AIC
+model.null  2 719.5867
+model.1     3 671.2654
+model.3     5 659.8009
+model.4     5 636.9401
+model.5     5 639.2953
+model.6     5 658.7810
+model.7     5 658.0234
+model.8     9 642.9715
 
+Warning message:
+In AIC.default(model.null, model.1, model.3, model.4, model.5, model.6,  :
+  models are not all fitted to the same number of observations
+
+
+Thus we have determined model.4 is has the best model fit.  
+> **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. To avoid this it can be helpful to clean your data first. This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
+
+Now we can check the residuals again to see if it meet the assumptions of linear regression. 
 ```
 #### Check residuals 
 resid4 <-  resid(model.4)
@@ -204,11 +239,12 @@ plot(model.4)               # Model assumptions are met, some outliers (e.g.6,96
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid4)        # p>0.05 = normal distribution
 ```
-Analyse residuals: https://rpubs.com/iabrady/residual-analysis
+They do! 
 
-> **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters, as some data sets have N/A values. To avoid this it can be helpful to clean your data first. This [CC tutorial]() teaches you how to do that.* 
+#### Conclusion 
+Based on the HRA we have performed, the best subset of parameters to predict plant height are temperature, rain and Leaf area index.
 
-As we have a big number of parameters, checking all possible combinations can take quite a long time. To make things faster we can use an automated computation process, that checks the models for us, step by step: **Stepwise Regression Analysis**
+However, we have not checked all possible variations. As we have a big number of parameters, checking all possible combinations can take quite a long time. To make things faster we can use an automated computation process, that checks the models for us, step by step: **Stepwise Regression Analysis**
 
 <a name="4. Stepwise regression analysis"></a>
 ## 4. Stepwise regression analysis 
