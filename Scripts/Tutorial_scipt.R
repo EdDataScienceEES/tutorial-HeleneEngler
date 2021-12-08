@@ -7,17 +7,11 @@
 
 #Loading required R packages ----
 library(tidyverse)  # Data manipulation and visualization
-library(ggplot2)    # Data visualisation 
-library(lme4)       # Linear Models 
-library(janitor)    # Data cleaning
 library(olsrr)      # Stepwise regression analsysis
 library(MASS)       # Stepwise regression analsysis
 
 ##Install necessary packages
 #install.packages("tidyverse")
-#install.packages("ggplot2")
-#install.packages("lme4")
-#install.packages("janitor")
 #install.packages("olsrr")
 #install.packages("MASS")
 
@@ -40,16 +34,12 @@ hist(traits$height, breaks = 10) # non normal distribution, right skew
 
 # Log transforming data, to achieve normal distribution
 traits <-  traits %>%
-  mutate(log.ht = log(height))
+  mutate(log.ht = log(height))   #create new collum with log[height]
 
 # Check log distribtuion 
 #jpeg("Outputs/htlog_hist.jpeg")
 hist(traits$log.ht, breaks = 10) # close enough to normal 
 
-# Plot Histogram with ggplot2
-ggplot(traits, aes(x=log.ht)) + 
-  geom_histogram(bins = 30)     
-ggsave("Outputs/final_htlog_hist.jpeg")
 # Shapiro test 
 shapiro.test(traits$log.ht)       # p < 0.05 indicates non-normal distribuion
 ## but usually linear models are not too sensitive, we will push on and look at the residuals
