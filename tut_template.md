@@ -208,7 +208,7 @@ As we have a big number of parameters, checking all possible combinations can ta
 
 <a name="4. Stepwise regression analysis"></a>
 ## 4. Stepwise regression analysis 
-http://90s90s90s.com/post/97737121690/codeinebeauty-love-this-episode-lol
+<p align="center"><img src="https://c.tenor.com/l9JLon0fufoAAAAC/funny-aerobics.gif" width="500" height="400" /></p>
 
 While in HRA you decide what terms to enter at which stage, stepwise regression analysis (SRA) is an automated process in which the program enters and discards terms based on the criterion you selected (e.g. R2, AIC, BIC). 
 
