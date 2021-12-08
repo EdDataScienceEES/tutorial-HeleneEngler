@@ -13,19 +13,17 @@
 ##### <a href="3.3 Selection Approach "> 3.3 Selection Approach </a>
 ##### <a href="3.4 Model Creation "> 3.4 Model Creation </a>
 
-#### <a href="# Stepwise regression analysis "> 4. Stepwise regression analysis </a>
+#### <a href="Stepwise regression analysis"> 4. Stepwise regression analysis </a>
+#### <a href="7.1 MASS package "> 4.1 MASS package </a>
+#### <a href="7.2 olsrr package "> 4.2 olsrr package </a>
 
-#### <a href="Stepwise regression analysis"> 5. Stepwise regression analysis </a>
-#### <a href="7.1 MASS package "> 5.1 MASS package </a>
-#### <a href="7.2 olsrr package "> 5.2 olsrr package </a>
+#### <a href="HRA and SRA: Advantages and Drawbacks"> 5. HRA and SRA: Advantages and Drawbacks </a>
 
-#### <a href="HRA and SRA: Advantages and Drawbacks"> 6. HRA and SRA: Advantages and Drawbacks </a>
+#### <a href="Challenge"> 6. Challenge </a>
 
-#### <a href="Challenge"> 7. Challenge </a>
+#### <a href="Additional Materials"> 7. Additional Materials </a>
 
-#### <a href="Additional Materials"> 8. Additional Materials </a>
-
-#### <a href="References"> 9. References </a>
+#### <a href="References"> 8. References </a>
 
 ---------------------------
 <a name="1. Introduction"></a>
