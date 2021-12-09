@@ -3,8 +3,8 @@
 ## Finding the best subset parameters for simple linear multiple regressions
 
 #### <a href="1. Tutorial Introduction"> 1. Tutorial Introduction </a>
-##### <a href="Learning Outcomes"> Learning Outcomes </a>
-##### <a href="Requiremed Skills"> Requiremed Skills </a>
+##### <a href="1.1 Learning Outcomes"> 1.1 Learning Outcomes </a>
+##### <a href="1.2 Requiremed Skills"> 1.2 Requiremed Skills </a>
 
 #### <a href="2. From linear models to hierarchical regression analysis"> 2. From linear models to hierarchical regression analysis </a>
 
@@ -14,17 +14,17 @@
 ##### <a href="3.3 Selection Approach "> 3.3 Selection Approach </a>
 ##### <a href="3.4 Model Creation "> 3.4 Model Creation </a>
 
-#### <a href="Stepwise regression analysis"> 4. Stepwise regression analysis </a>
+#### <a href="4. Stepwise regression analysis"> 4. Stepwise regression analysis </a>
 ##### <a href="4.1 MASS package "> 4.1 MASS package </a>
 ##### <a href="4.2 olsrr package "> 4.2 olsrr package </a>
 
-#### <a href="HRA and SRA: Advantages and Drawbacks"> 5. HRA and SRA: Advantages and Drawbacks </a>
+#### <a href="5. HRA and SRA: Advantages and Drawbacks"> 5. HRA and SRA: Advantages and Drawbacks </a>
 
-#### <a href="Challenge"> 6. Challenge </a>
+#### <a href="6. Challenge"> 6. Challenge </a>
 
-#### <a href="Additional Materials"> 7. Additional Materials </a>
+#### <a href="7. Additional Materials"> 7. Additional Materials </a>
 
-#### <a href="References"> 8. References </a>
+#### <a href="8. References"> 8. References </a>
 
 ---------------------------
 
@@ -33,8 +33,8 @@
 
 This tutorial is designed for R users who want to learn how to use **hierarchical and stepwise regression analysis**, to **identify significant and powerful predictors** influencing your explanatory variable from a bigger number of potential variables. 
 
-<a name="Learning Outcomes"></a>
-### Learning Outcomes 
+<a name="1.1 Learning Outcomes"></a>
+### 1.1 Learning Outcomes 
 **1. Understand what Multiple Regression is.**  
 **2. Learn what Hierarchical Regression Analysis is and when to use it.**   
 **3. Step-by-step introduction to performing Hierarchical Regression Analysis.**  
@@ -42,8 +42,8 @@ This tutorial is designed for R users who want to learn how to use **hierarchica
 **4. Compute a simple Stepwise Regression Analysis.**  
 **5. Advantages and Drawbacks of Hierarchical and Stepwise Regression Analysis, when to use them and when not to.**   
 
-<a name="Required Skills"></a>
-### Required Skills 
+<a name="1.2 Required Skills"></a>
+### 1.2 Required Skills 
 To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant [Coding Club tutorials](https://ourcodingclub.github.io/tutorials.html) linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as [ANOVA](https://ourcodingclub.github.io/tutorials/anova/) and [linear modelling in R](https://ourcodingclub.github.io/tutorials/model-design/), before attempting these slightly more advanced statistical tests. 
 
 > **_NOTE:_** *All the material you need to complete this tutorial can be downloaded from [this repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler). Click on `Code` / `Download ZIP`and downloand and unzip the folder, or clone the repository to your R studio.*
