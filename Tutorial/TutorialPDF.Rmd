@@ -1,5 +1,19 @@
+---
+title: "Hierarchical and Stepwise Regression Analysis"
+author: "Helene Engler"
+date: "09/12/2021"
+output:
+  word_document: default
+  pdf_document: default
+---
 
-# Hierarchical and Stepwise Regression Analysis 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+setwd("/Users/HeleneEngler/University/R/tutorial-HeleneEngler")
+# Load Data ----
+traits <- read.csv("Inputs/plant_traits.csv")
+```
+
 ## Finding the best subset parameters for simple linear multiple regressions
 
 #### <a href="Tutorial Introduction"> 1. Tutorial Introduction </a>
@@ -20,7 +34,7 @@
 
 #### <a href="HRA and SRA: Advantages and Drawbacks"> 5. HRA and SRA: Advantages and Drawbacks </a>
 
-#### <a href="Challenge"> 6. Challenge </a>
+####< a href="Challenge"> 6. Challenge </a>
 
 #### <a href="Additional Materials"> 7. Additional Materials </a>
 
@@ -50,7 +64,7 @@ To complete this tutorial some basic knowledge about building statistical models
 
 The following script for HRA can be run by just using basic R. you might want to use the `tidyverse` library to clean the data and make some processing easier, but you dont have to. For the Stepwise regression analysis we will be using the `MASS` and the `olsrr` libraries. You should load/install them at the beginning od your script. 
 
-```
+```{r, eval=FALSE}
 # Loading required R packages ----
 library(tidyverse)  # Data manipulation and visualization
 library(olsrr)      # Stepwise regression analsysis
@@ -82,7 +96,7 @@ Determining a research question and setting a hypothesis before the statistical 
 In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen from around the world and some connected environmental information, such as the locations rainfall, average temperature or the leaf areas indey measured at the plants location. You can download the plant_traits CSV file [here](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/blob/master/Inputs/plant_traits.csv) and import it into a new R script. 
 A bit of preliminary analysis shows that the plant traits data set contains 18 observations (including plant height) for 178 different plant specimen. 
 
-```
+```{r, eval=FALSE}
 # Load Data ----
 traits <- read.csv("filepath_to_data")
 
@@ -112,18 +126,19 @@ These assumptions are:
 It is important to check if these assumptions apply to our data before you start modelling, as well as after we have run the model, in the residuals. 
 
 So lets check the distribution of our dependent variable, plant height, with a histogram. 
-```
+
+```{r, eval=FALSE}
 # Check data distribution
 ## Plot Histogram in basic R 
 hist(traits$height, breaks = 10) # non normal distribution, right skew
 ```
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/91228202/145286937-c6a575be-5c3f-4a1c-82d9-846114322ffe.png" />
-<p align="center"> *Figure 1. Distribution of plant height(m).* </p>
-
+```{r hist1, echo=FALSE}
+hist(traits$height, breaks = 10)
+```
+<p align="center"> *Figure 1. Distribution of plant height [m].* </p>
 We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. 2014 in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository). 
 
-```
+```{r, eval=FALSE}
 # Log transforming data, to achieve normal distribution
 traits <-  traits %>%
   mutate(log.ht = log(height))   #create new collum with log[height]
@@ -131,7 +146,11 @@ traits <-  traits %>%
 # Check log distribtuion 
 hist(traits$log.ht, breaks = 10) # close to normal
 ```
-<p align="center"><img src="https://user-images.githubusercontent.com/91228202/145290312-9a44c8b6-deba-4920-9198-26513ce34dfe.png" />
+```{r hist2, echo=FALSE}
+library(tidyverse)
+traits <-  mutate(traits, log.ht = log(height))
+hist(traits$log.ht, breaks = 10)
+```
 <p align="center"> *Figure 2. Distribution of log[plant height(m)].* </p>
 
 While the data still does not look perfectly normally distributed it should be fine for modelling. Perfect normal distributions are rare in environmental data and linear models are not that sensitive to slight abnormalities in distribution. However, it is important to check the residuals of the model we will build, to be able to prove the validity of your statistical method. 
@@ -143,22 +162,21 @@ While the data still does not look perfectly normally distributed it should be f
 Models can be compared using a range of different criteria, such as R2, AIC, AICc, BIC or others. It is important to consider your data and the goal of your model when choosing a selection criterion. measure of fit
 
 ---
+
 **Selection Criteria**  
 
-**R-squared (R2)** *quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as:*  
+**R-squared (R2)** *quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as: variation explained by model/total variation.*
+*Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** *should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.*  
+*Drawbacks of R2 values include that it does not indicate bias in predictions and is susceptible to overfitting and data mining. It always needs to be examined in combination with residual plots!* 
+*To learn more about the adjusted R2 and how to use it, you can read [this blogpost]( https://statisticsbyjim.com/regression/interpret-adjusted-r-squared-predicted-r-squared-regression/).*
 
-<img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png"> </center>  
-
-*Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.  
-Drawbacks of R2 values include that it does not indicate bias in predictions and is susceptible to overfitting and data mining. It always needs to be examined in combination with residual plots! 
-To learn more about the adjusted R2 and how to use it, you can read [this blogpost]( https://statisticsbyjim.com/regression/interpret-adjusted-r-squared-predicted-r-squared-regression/).*
-
-**Akaike information criterion (AIC)** *can be used to determine the relative predictive power and goodness of model fit though an estimation of error. Its value indicates the quality of a model relative to other models in a set. A smaller AIC is usually better, however an AIC value cannot be considered out of context. The AIC value alone does not give an indication of the model quality, but is only useful when compared to related models. It estimates the amount of information lost from a model and includes trade-offs between goodness of fit  and the simplicity of the model. Thus, one of the great benefits of the AIC is that it penalizes overfitting and the addition of more parameters. 
-For models with small sample sizes the AIC often selects models with too many parameters (overfitting). Thus the **AICc**, which is an AIC with a correction for small sample sizes, should be used when modelling small sample sizes. It invokes a greater penalty than AIC for each additional parameter estimated, which offers greater ‘protection’ against overfitting.* 
+**Akaike information criterion (AIC)** *can be used to determine the relative predictive power and goodness of model fit though an estimation of error. Its value indicates the quality of a model relative to other models in a set. A smaller AIC is usually better, however an AIC value cannot be considered out of context. The AIC value alone does not give an indication of the model quality, but is only useful when compared to related models. It estimates the amount of information lost from a model and includes trade-offs between goodness of fit  and the simplicity of the model. Thus, one of the great benefits of the AIC is that it penalizes overfitting and the addition of more parameters.* 
+*For models with small sample sizes the AIC often selects models with too many parameters (overfitting). Thus the **AICc**, which is an AIC with a correction for small sample sizes, should be used when modelling small sample sizes. It invokes a greater penalty than AIC for each additional parameter estimated, which offers greater ‘protection’ against overfitting.* 
 
 **Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
 -	*Find the model that gives the best prediction (without assuming that any of the models are correct) use AIC*  
 -	*Find the **true model**, with the assumptions that fit reality closest, use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)*
+
 ---
 
 It is often good practice to include both the AIC and the BIC into your model selection process and compare their evaluation of the model. However for simplicity's sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. 
@@ -175,14 +193,14 @@ model.null <- lm(log.ht ~ 1, data=traits)
 #### Add variables  
 Let´s start with a simple model using only one parameter. The manual addition of parameters has to be based on scientific, ecological reasoning: What variable is most likely to influence plant height? Temperature and rain are very likely to have a significant impact on plant height. So the first addition is temperature: 
 
-```
+```{r, eval=FALSE}
 # Simple univariate model
 model.1 <- lm(log.ht ~ temp, data=traits)
 ```
 This first model delineates the influence of temperature on plant height.  
 Before we can go on to add more parameters, we should check if the assumptions of a linear regression have been met in this simple model. This can be done using the `resid()` and the `plot()` function. 
 
-```
+```{r, eval=FALSE}
 # Check if assumptions are met 
 resid1 <-  resid(model.1)
 plot(resid1)                # Equal variance, no observable patterns
@@ -190,12 +208,11 @@ plot(model.1)               # Model assumptions are met, some outliers,
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
-<p float="left">
-  <img src="https://user-images.githubusercontent.com/91228202/145438689-1e33562b-a4d4-4534-b416-13e2acf18f7d.png" width="240" />
-  <img src="https://user-images.githubusercontent.com/91228202/145438819-1225115e-daec-4f34-b763-edc627ad68e7.png" width="240" /> 
-  <img src="https://user-images.githubusercontent.com/91228202/145439003-d80efe59-5bac-4265-91c1-37d3700c26b8.png" width="240"/>
-  <img src="https://user-images.githubusercontent.com/91228202/145438908-e16bcd2f-eb3b-40c1-aea4-709e9e9e3d68.png" width="240"/>
-</p>
+```{r resid, echo=FALSE}
+model.1 <- lm(log.ht ~ temp, data=traits)
+resid1 <-  resid(model.1)
+plot(model.1)
+```
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
 The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
 To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is *significant* (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.
@@ -204,13 +221,13 @@ To test the normality of the residuals a Shapiro-Wills test may be performed. Th
 
 Now we can compare `model.1 to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
 
-```
+```{r, eval=FALSE}
 # Check predcitive power 
 AIC(model.null, model.1)
 ```
 This returns the AIC of the null model and `model.1`.
 
-```
+```{r, eval=FALSE}
 > AIC(model.null, model.1)
            df      AIC
 model.null  2 719.5867
@@ -218,7 +235,7 @@ model.1     3 671.2654
 ```
 The AIC of `model.1` is smaller than that of the null model, so we can keep temperature and add more parameters: 
 
-```
+```{r, eval=FALSE}
 # Add on to the model
 model.2 <- lm(log.ht ~ temp + rain, data=traits)                # Include rain
 model.3 <- lm(log.ht ~ temp + rain + alt, data=traits)          # Include altitude
@@ -235,7 +252,7 @@ AIC(model.null, model.1, model.2, model.3, model.4, model.5, model.6, model.7, m
 
 After we have build all the models we want to evaluate, we check their AIC to determine which parameters should be kept and do not add to the power of the model. 
 
-```
+```{r, eval=FALSE}
 > AIC(model.null, model.1, model.3, model.4, model.5, model.6, model.7, model.8)                
            df      AIC
 model.null  2 719.5867
@@ -257,7 +274,7 @@ Thus we have determined model.4 is has the best model fit.
 > **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. To avoid this it can be helpful to clean your data first (e.g. using `na.omit(). This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
 
 Now we can check the residuals again to see if it meet the assumptions of linear regression. 
-```
+```{r, eval=FALSE}
 # Check residuals 
 resid4 <-  resid(model.4)
 plot(resid1)                # Equal variance, no observable patterns
@@ -274,20 +291,19 @@ However, we have not checked all possible variations. As we have a big number of
 
 <a name="4. Stepwise regression analysis"></a>
 ## 4. Stepwise regression analysis 
-<p align="center"><img src="https://c.tenor.com/l9JLon0fufoAAAAC/funny-aerobics.gif" width="500" height="400" /></p>
 
 While in HRA you decide what terms to enter at which stage, stepwise regression analysis (SRA) is an automated process in which the program enters and discards terms based on the criterion you selected (e.g. R2, AIC, BIC). 
 
 There are many packages that can perform SRA in R. We will use ´ls_step from the ´olsrr´ package. The requirements for SRA are the same as for HRA. Thus the data distribution and residuals have to be checked! 
 First we define the model we want to evaluate. To include all parameters into the model it may be constructed like this: 
 
-```
+```{r}
 all <- lm(log.ht ~ ., data=traits)
 ```
 However, the plant traits data set includes parameters that are not of ecological importance, such as the person taking the measurements, and categorical parameters. While these can be included into regression models, this is a bit more complex and we will focus on continuous variables.  
 Thus a subset of variables to be tested can be defined: 
 
-```
+```{r}
 step.model <- lm(log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm, data=traits)
 ```
 We can feed this model into the stepwise function we have selected now: 
@@ -301,12 +317,12 @@ SRA can be performed forwards and backwards. **Forward** selection is a *bottom-
 Most R SRA packages include a function for **both**, where selection carried out in both directions. This is what we will use here. 
 Including `trace = TRUE prints out all the steps that R performs. 
 
-```
+```{r, eval=FALSE}
 step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")
 ```
 The output of this function shows the stepwise addition and removal performed and the connected change in AIC. 
 
-```
+```{r, eval=FALSE}
 > step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")    # both directions
 Start:  AIC=152.86
 log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm
@@ -379,7 +395,7 @@ You can see that the last model does not improve any further, so the SRA is fini
 ### 4.1 olsrr package
 Using the `olsrr` package is even more simple. It includes several functions for SRA, we will use ` ols_step_both_aic()` which compares models based on their AIC. It performs both the backwards and forwards SRA. 
 
-```
+```{r, eval=FALSE}
 SRA <- ols_step_both_aic(step.model, progress = TRUE, details = TRUE)
 SRA
 ```
@@ -388,7 +404,7 @@ Set `progress = TRUE` and `details = TRUE` to get a full report on the step by s
 > **_NOTE_**: *Make sure to always have a look at the way and the order the program removed or added parameters, to avoid mistakes.* 
 
 Calling the function shows us a long outputs table detailing the step by step comparison process. I am just showing the last step, where the final model was determined. The function also return a model sumary and an ANOVA table for the final model.   
-```
+```{r, eval=FALSE}
 Step 5 : AIC = 636.9401 
  log.ht ~ temp + rain + LAI 
 
@@ -438,10 +454,15 @@ Total         563.477        171
 ----------------------------------------------------------------------------------------
 ```
 We can visualise the change in AIC for each step with the ´plot()´ function. 
-```
+```{r, eval=FALSE}
 plot(SRA)
 ```
-<p align="center"><img src="https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png" />
+```{r SRA, echo=FALSE}
+library(olsrr)
+step.model <- lm(log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm, data=traits)
+SRA <- ols_step_both_aic(step.model, progress = TRUE, details = TRUE)
+plot(SRA)
+```
 <p align="center"> *Figure 3. Stepwise Regression Analysis to determine best subset for plant height.* </p>
 
 This function comes to the same conclusion as the `MASS` package and the HRA. 
