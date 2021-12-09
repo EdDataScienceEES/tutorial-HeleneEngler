@@ -1,4 +1,4 @@
-# Hierarchical and Stepwise Regression Analysis Tutorial
+![EB6D50F5-98D5-4826-ADE2-7381B87ECA53_1_201_a](https://user-images.githubusercontent.com/91228202/145408225-67662aff-40ad-430c-b0e2-0d0d5ef8fd95.jpeg)
 ## Tutorial Assignment for Data Sciene for Ecologists at the University of Edinburgh
 by Helene Engler
 09/12/2021
