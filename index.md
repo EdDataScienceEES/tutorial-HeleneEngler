@@ -60,6 +60,7 @@ library(MASS)       # Stepwise regression analsysis
 #install.packages("tidyverse")
 #install.packages("olsrr")
 #install.packages("MASS")
+```
 
 <a name="2. From linear models to hierarchical regression analysis"></a>
 ## 2. From linear models to hierarchical regression analysis
