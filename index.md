@@ -53,10 +53,10 @@ To complete this tutorial some basic knowledge about building statistical models
 The relationship between a dependent (or response) variable and an independent variable (also called 'predictors', 'covariates', 'explanatory variables' or 'features') can be estimated/modelled with regression analysis. Linear regression is used to find a linear line which fits the most data points according to a specific mathematical criterion. This can be help us understand and predict the behaviour of complex systems or analyse observational and experimental data.
 
 However, linear models only describe the relationship between one dependent and one independent variable. This can be especially limiting in environmental systems, where most processes or observations are influenced by a variety of different factors. This is where multiple regression comes in: **multiple linear regressions** can give a line of best fit to predict the relationship of a dependent and multiple independent variables. 
-While this allows the exploration of many factors that may influence a dependent variable, such models can become increasingly more complex, as more and more explanatory variables are added. When [interactions]() or [polynomials]() are included, things can become exceedingly. Thus it is important to identify the parameters which actually influence the dependent variable and make a significant statistical contribution to our model.
+While this allows the exploration of many factors that may influence a dependent variable, such models can become increasingly more complex, as more and more explanatory variables are added. When [interactions](https://en.wikipedia.org/wiki/Interaction) or [polynomials](https://en.wikipedia.org/wiki/Polynomial) are included, things can become exceedingly. Thus it is important to identify the parameters which actually influence the dependent variable and make a significant statistical contribution to our model.
 While this selection process should always be based on **scientific reasoning** and an **understanding of the theory of the systems** studied, there are statistical methods that can help us with the selection process based on statistical criteria: Once a sensible subset of parameters has been narrowed down, hierarchical regression analysis (HRA), can be used to compare successive regression models and to determine the significance that each one has above and beyond the others. This tutorial will explore how the basic HRR process can be conducted in R. 
 
-> **_NOTE:_** *Do not confuse hierarchical regression analysis with hierarchical modelling. Hierarchical modelling is a type of “multi-level modeling” which is a used to model data with a nested structure. [This website] explains the differences between hierarchical regression and modelling very well if you are still having trouble separating them.*
+> **_NOTE:_** *Do not confuse hierarchical regression analysis with hierarchical modelling. Hierarchical modelling is a type of “multi-level modeling” which is a used to model data with a nested structure.*
 
 <a name="3. Hierarchical Regression Analysis "></a>
 ## 3. Hierarchical Regression Analysis 
@@ -65,7 +65,7 @@ While this selection process should always be based on **scientific reasoning** 
 ### 3.1 Setting a Research Question  
 Determining a research question and setting a hypothesis before the statistical analysis of your data is always imperative for good science. It ensures a structured, focused work flow and reduces the risk of *researcher bias* and *significance chasing* (=  the misuse of data analysis to find patterns in data that can be presented as statistically significant, which indreases type 1 errors). 
 
-In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen around the world and some connected environmental information, such as the locations rainfall, average temperature or the leaf areas indey measured at the plants location. You can download the plant_traits data seta as a CSV file [here]() and import it into a new R script. 
+In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen around the world and some connected environmental information, such as the locations rainfall, average temperature or the leaf areas indey measured at the plants location. You can download the plant_traits data seta as a CSV file [here](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/blob/master/Inputs/plant_traits.csv) and import it into a new R script. 
 A bit of preliminary analysis shows that the plant traits data set contains 18 observations (including plant height) for 178 different plant specimen. 
 
 ```
@@ -107,7 +107,7 @@ hist(traits$height, breaks = 10) # non normal distribution, right skew
   <img src="https://user-images.githubusercontent.com/91228202/145286937-c6a575be-5c3f-4a1c-82d9-846114322ffe.png" />
 <p align="center"> *Figure 1. Distribution of plant height(m).* </p>
 
-We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. 2014 in the [resources folder]()). 
+We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. 2014 in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository). 
 
 ```
 # Log transforming data, to achieve normal distribution
@@ -264,6 +264,8 @@ However, the plant traits data set includes parameters that are not of ecologica
 Thus a subset of variables to be tested can be defined: 
 
 ```
+library(MASS)
+#install.packages("MASS")
 step.model <- lm(log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm, data=traits)
 ```
 We can feed this model into the stepwise function we have selected now: 
@@ -278,6 +280,9 @@ Most R SRA packages include a function for **both**, where selection carried out
 Including `trace = TRUE prints out all the steps that R performs. 
 
 ```
+library(olsrr)
+#install.packages("olsrr")
+
 step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")
 ```
 The output of this function shows the stepwise addition and removal performed and the connected change in AIC. 
