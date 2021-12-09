@@ -46,7 +46,7 @@ This tutorial is designed for R users who want to learn how to use **hierarchica
 ### Required Skills 
 To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant [Coding Club tutorials](https://ourcodingclub.github.io/tutorials.html) linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as [ANOVA](https://ourcodingclub.github.io/tutorials/anova/) and [linear modelling in R](https://ourcodingclub.github.io/tutorials/model-design/), before attempting these slightly more advanced statistical tests. 
 
-> **_NOTE:_** *All the material you need to complete this tutorial can be downloaded from [this repository](https://github.com/ourcodingclub/CC-anova). Click on `Code` / `Download ZIP`and downloand and unzip the folder, or clone the repository to your R studio.*
+> **_NOTE:_** *All the material you need to complete this tutorial can be downloaded from [this repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler). Click on `Code` / `Download ZIP`and downloand and unzip the folder, or clone the repository to your R studio.*
 
 <a name="2. From linear models to hierarchical regression analysis"></a>
 ## 2. From linear models to hierarchical regression analysis
