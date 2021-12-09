@@ -5,6 +5,7 @@ by Helene Engler
 m.helene.engler@sms.ed.ac.uk
 
 The tutorial can be accessed as a website here: https://eddatascienceees.github.io/tutorial-HeleneEngler/
+(There is some error from secton 3.2 onwards, I could not figure out how to fix it. the index.md file is properly formatted) 
 
 ### Repository contents:
 
@@ -25,7 +26,7 @@ Contains all pictures used in the tutorial and outputs generated
 - Life_expectancy_SRA_Challenge.R (challenge solution script)
 
 #### Tutorial 
-Includes the md file for the submitted pfd and the pdf file for Turnitin 
+Includes the md file for the submitted pfd and the pdf file for Turnitin, as well as a Word version of it.  
 
 #### Instructions.md
 Assignment Instructions 
