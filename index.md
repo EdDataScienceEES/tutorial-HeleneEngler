@@ -152,7 +152,7 @@ Models can be compared using a range of different criteria, such as R2, AIC, AIC
 
 **R-squared (R2)** *quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as:*  
 
-<img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png"> </center>  
+<img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png">
 
 *Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.  
 Drawbacks of R2 values include that it does not indicate bias in predictions and is susceptible to overfitting and data mining. It always needs to be examined in combination with residual plots! 
@@ -164,6 +164,7 @@ For models with small sample sizes the AIC often selects models with too many pa
 **Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
 -	*Find the model that gives the best prediction (without assuming that any of the models are correct) use AIC*  
 -	*Find the **true model**, with the assumptions that fit reality closest, use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)*
+
 ---
 
 It is often good practice to include both the AIC and the BIC into your model selection process and compare their evaluation of the model. However for simplicity's sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. 
@@ -196,12 +197,12 @@ plot(model.1)               # Model assumptions are met, some outliers,
 shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/91228202/145438689-1e33562b-a4d4-4534-b416-13e2acf18f7d.png" width="240" />
-  <img src="https://user-images.githubusercontent.com/91228202/145438819-1225115e-daec-4f34-b763-edc627ad68e7.png" width="240" /> 
-  <img src="https://user-images.githubusercontent.com/91228202/145439003-d80efe59-5bac-4265-91c1-37d3700c26b8.png" width="240"/>
-  <img src="https://user-images.githubusercontent.com/91228202/145438908-e16bcd2f-eb3b-40c1-aea4-709e9e9e3d68.png" width="240"/>
+  <img src="https://user-images.githubusercontent.com/91228202/145438689-1e33562b-a4d4-4534-b416-13e2acf18f7d.png" width="320" />
+  <img src="https://user-images.githubusercontent.com/91228202/145438819-1225115e-daec-4f34-b763-edc627ad68e7.png" width="320" /> 
+  <img src="https://user-images.githubusercontent.com/91228202/145439003-d80efe59-5bac-4265-91c1-37d3700c26b8.png" width="320"/>
+  <img src="https://user-images.githubusercontent.com/91228202/145438908-e16bcd2f-eb3b-40c1-aea4-709e9e9e3d68.png" width="320"/>
 </p>
-<p align="center"> *Figure 3. Residuals of model.1.* </p>
+*Figure 3. Residuals of model.1.*
 
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
 The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
@@ -260,7 +261,7 @@ In AIC.default(model.null, model.1, model.3, model.4, model.5, model.6,  :
   models are not all fitted to the same number of observations
 ```
 
-Thus we have determined model.4 is has the best model fit.  
+Thus we have determined `model.4 is has the best model fit.  
 > **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. To avoid this it can be helpful to clean your data first (e.g. using `na.omit(). This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
 
 Now we can check the residuals again to see if it meet the assumptions of linear regression. 
