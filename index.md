@@ -295,6 +295,7 @@ Including `trace = TRUE prints out all the steps that R performs.
 step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")
 ```
 The output of this function shows the stepwise addition and removal performed and the connected change in AIC. 
+
 ```
 > step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")    # both directions
 Start:  AIC=152.86
