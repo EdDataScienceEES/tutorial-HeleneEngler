@@ -449,7 +449,8 @@ We can visualise the change in AIC for each step with the ´plot()´ function.
 ```
 plot(SRA)
 ```
-![SRA](https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png)
+![SRA](https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png)  
+
 *Figure 4. Stepwise Regression Analysis to determine best subset for plant height.*
 
 This function comes to the same conclusion as the `MASS` package and the HRA. 
@@ -481,7 +482,7 @@ If you haven’t had enough of HRA and SRA yet, you can try yourself at a data s
 
 <a name="7. Supplementary material "></a>
 ## 7. Supplementary material 
-**Supplementary material and links can be found in the [Github repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler) linked to this tutorial. **  
+**Supplementary material and links can be found in the [Github repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler) linked to this tutorial.**  
 
 If you have any thoughts or questions, please contact me at m.helene.engler@ed.sms.ac.uk. 
 
