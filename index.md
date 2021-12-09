@@ -123,13 +123,14 @@ hist(traits$height, breaks = 10) # non normal distribution, right skew
 
 We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. (2014) in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository). 
 
-
+```
 # Log transforming data, to achieve normal distribution
 traits <-  traits %>%
   mutate(log.ht = log(height))   #create new collum with log[height]
 
 # Check log distribtuion 
 hist(traits$log.ht, breaks = 10) # close to normal
+```
 
 <p align="center"><img src="https://user-images.githubusercontent.com/91228202/145290312-9a44c8b6-deba-4920-9198-26513ce34dfe.png" />
 <p align="center"> *Figure 2. Distribution of log[plant height(m)].* </p>
@@ -196,6 +197,8 @@ shapiro.test(resid1)        # p > 0.05, normally distributed residuals
   <img src="https://user-images.githubusercontent.com/91228202/145439003-d80efe59-5bac-4265-91c1-37d3700c26b8.png" width="240"/>
   <img src="https://user-images.githubusercontent.com/91228202/145438908-e16bcd2f-eb3b-40c1-aea4-709e9e9e3d68.png" width="240"/>
 </p>
+<p align="center"> *Figure 3. Residuals of model.1.* </p>
+
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
 The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
 To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is *significant* (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.
@@ -442,7 +445,7 @@ We can visualise the change in AIC for each step with the ´plot()´ function.
 plot(SRA)
 ```
 <p align="center"><img src="https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png" />
-<p align="center"> *Figure 3. Stepwise Regression Analysis to determine best subset for plant height.* </p>
+<p align="center"> *Figure 4. Stepwise Regression Analysis to determine best subset for plant height.* </p>
 
 This function comes to the same conclusion as the `MASS` package and the HRA. 
 But remember: After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
