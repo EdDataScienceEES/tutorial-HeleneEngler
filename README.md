@@ -8,4 +8,32 @@ The tutorial can be accessed as a website here: https://eddatascienceees.github.
 
 ### Repository contents:
 
-https://eddatascienceees.github.io/tutorial-HeleneEngler/
+#### Inputs  
+This folder contains all data sets used in the tutorial and challenges, as well as additonal data sets: 
+- plant_traits.csv (data input for the tutorial)
+- plant_traits_long.csv (orginal data set downloaded from: http://environmentalcomputing.net/linear-regression/, several parameters were excluded for the tutorial) 
+- LifeExpectancyData (Data set from https://data.world)
+
+#### Literature
+Includes supplementary reading to support the tutorial 
+
+#### Outputs 
+Contains all pictures used in the tutorial and outputs generated
+
+#### Scripts
+- Tutorial_scipt.R (tutorial script)
+- Life_expectancy_SRA_Challenge.R (challenge solution script)
+
+#### Tutorial 
+Includes the md file for the submitted pfd and the pdf file for Turnitin 
+
+#### Instructions.md
+Assignment Instructions 
+
+#### index.md
+Markdown file used to create the tutorial website 
+
+
+
+
+

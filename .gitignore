@@ -37,3 +37,7 @@ rsconnect/
 
 #R project file 
 .tutorial-HeleneEngler.Rproj
+
+#index files
+.index.html
+.index.txt
