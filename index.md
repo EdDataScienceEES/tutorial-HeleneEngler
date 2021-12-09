@@ -37,7 +37,7 @@ This tutorial is designed for R users who want to learn how to use **hierarchica
 ### Learning Outcomes 
 **1. Understand what Multiple Regression is.**  
 **2. Learn what Hierarchical Regression Analysis is and when to use it.**   
-**3. Step-by-step introduction how to perform a Hierarchical Regression Analysis.**  
+**3. Step-by-step introduction to performing Hierarchical Regression Analysis.**  
 **4. Learn what Stepwise Regression Analysis is and when to use it.**  
 **4. Compute a simple Stepwise Regression Analysis.**  
 **5. Advantages and Drawbacks of Hierarchical and Stepwise Regression Analysis, when to use them and when not to.**   
@@ -48,29 +48,42 @@ To complete this tutorial some basic knowledge about building statistical models
 
 > **_NOTE:_** *All the material you need to complete this tutorial can be downloaded from [this repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler). Click on `Code` / `Download ZIP`and downloand and unzip the folder, or clone the repository to your R studio.*
 
+The following script for HRA can be run by just using basic R. you might want to use the `tidyverse` library to clean the data and make some processing easier, but you dont have to. For the Stepwise regression analysis we will be using the `MASS` and the `olsrr` libraries. You should load/install them at the beginning od your script. 
+
+```
+# Loading required R packages ----
+library(tidyverse)  # Data manipulation and visualization
+library(olsrr)      # Stepwise regression analsysis
+library(MASS)       # Stepwise regression analsysis
+
+# Install necessary packages
+#install.packages("tidyverse")
+#install.packages("olsrr")
+#install.packages("MASS")
+
 <a name="2. From linear models to hierarchical regression analysis"></a>
 ## 2. From linear models to hierarchical regression analysis
-The relationship between a dependent (or response) variable and an independent variable (also called 'predictors', 'covariates', 'explanatory variables' or 'features') can be estimated/modelled with regression analysis. Linear regression is used to find a linear line which fits the most data points according to a specific mathematical criterion. This can be help us understand and predict the behaviour of complex systems or analyse observational and experimental data.
+The relationship between a dependent (or response) variable and an independent variable (also called 'predictors', 'covariates', 'explanatory variables' or 'features') can be estimated/modelled with regression analysis. Linear regression is used to find a linear line which fits the most data points according to a specific mathematical criterion. This can help us understand and predict the behaviour of complex systems or analyse observational and experimental data.
 
 However, linear models only describe the relationship between one dependent and one independent variable. This can be especially limiting in environmental systems, where most processes or observations are influenced by a variety of different factors. This is where multiple regression comes in: **multiple linear regressions** can give a line of best fit to predict the relationship of a dependent and multiple independent variables. 
-While this allows the exploration of many factors that may influence a dependent variable, such models can become increasingly more complex, as more and more explanatory variables are added. When [interactions](https://en.wikipedia.org/wiki/Interaction) or [polynomials](https://en.wikipedia.org/wiki/Polynomial) are included, things can become exceedingly. Thus it is important to identify the parameters which actually influence the dependent variable and make a significant statistical contribution to our model.
-While this selection process should always be based on **scientific reasoning** and an **understanding of the theory of the systems** studied, there are statistical methods that can help us with the selection process based on statistical criteria: Once a sensible subset of parameters has been narrowed down, hierarchical regression analysis (HRA), can be used to compare successive regression models and to determine the significance that each one has above and beyond the others. This tutorial will explore how the basic HRR process can be conducted in R. 
+While this allows the exploration of many factors that may influence a dependent variable, such models can become increasingly more complex, as more and more explanatory variables are added. When [interactions](https://en.wikipedia.org/wiki/Interaction) or [polynomials](https://en.wikipedia.org/wiki/Polynomial) are included, things can become exceedingly. Thus it is important to identify the parameters which actually influence the dependent variable and make a statistically significant contribution to our model.
+While this selection process should always be based on **scientific reasoning** and an **understanding of the theory of the systems** studied, there are statistical methods that can help us with the selection process based on statistical criteria: Once a sensible subset of parameters has been narrowed down, hierarchical regression analysis (HRA), can be used to compare successive regression models and to determine the significance that each one has above and beyond the others. This tutorial will explore how the basic HRA process can be conducted in R. 
 
-> **_NOTE:_** *Do not confuse hierarchical regression analysis with hierarchical modelling. Hierarchical modelling is a type of “multi-level modeling” which is a used to model data with a nested structure.*
+> **_NOTE:_** *Do not confuse hierarchical regression analysis with hierarchical modelling. Hierarchical modelling is a type of “multi-level modeling” which is used to model data with a nested structure.*
 
 <a name="3. Hierarchical Regression Analysis "></a>
 ## 3. Hierarchical Regression Analysis 
 
 <a name="3.1 Setting a Research Question "></a>
 ### 3.1 Setting a Research Question  
-Determining a research question and setting a hypothesis before the statistical analysis of your data is always imperative for good science. It ensures a structured, focused work flow and reduces the risk of *researcher bias* and *significance chasing* (=  the misuse of data analysis to find patterns in data that can be presented as statistically significant, which indreases type 1 errors). 
+Determining a research question and setting a hypothesis before the statistical analysis of your data is always imperative for good science. It ensures a structured, focused work flow and reduces the risk of *researcher bias* and *significance chasing* (=  the misuse of data analysis to find patterns in data that can be presented as statistically significant, which increases type 1 errors). 
 
-In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen around the world and some connected environmental information, such as the locations rainfall, average temperature or the leaf areas indey measured at the plants location. You can download the plant_traits data seta as a CSV file [here](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/blob/master/Inputs/plant_traits.csv) and import it into a new R script. 
+In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen from around the world and some connected environmental information, such as the locations rainfall, average temperature or the leaf areas indey measured at the plants location. You can download the plant_traits CSV file [here](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/blob/master/Inputs/plant_traits.csv) and import it into a new R script. 
 A bit of preliminary analysis shows that the plant traits data set contains 18 observations (including plant height) for 178 different plant specimen. 
 
 ```
 # Load Data ----
-traits <- read.csv("plant_traits.csv")
+traits <- read.csv("filepath_to_data")
 
 # Explore Data Frame (df) ----
 head(traits)
@@ -91,8 +104,8 @@ As mentioned above, HRA is based on linear regression and thus has to conform to
 These assumptions are: 
 1)	**Linearity**: The relationship between the response and explanatory variables is linear. 
 2)	**Homoscedacity**: The variance in the residuals (or amount of error in the model) is similar at each point across the model (also called constant variance).  
-3)	**Normality**: The data is normally distributed. 
-4)	**No Multi-collinearity**: The predictor variables are not too highly correlated with each other. 
+3)	**Normality**: The data is normally distributed.  
+4)	**No Multi-collinearity**: The predictor variables are not too highly correlated with each other.  
 5)	**Absence of outliers**: There are no outliers that influence the relationship excessively.  
 
 It is important to check if these assumptions apply to our data before you start modelling, as well as after we have run the model, in the residuals. 
@@ -137,7 +150,7 @@ Usually a higher R2 is better, as it indicates a higher degree of variation is e
 Drawbacks of R2 values include that it does not indicate bias in predictions and is susceptible to overfitting and data mining. It always needs to be examined in combination with residual plots! 
 To learn more about the adjusted R2 and how to use it, you can read [this blogpost]( https://statisticsbyjim.com/regression/interpret-adjusted-r-squared-predicted-r-squared-regression/).*
 
-**Akaike information criterion (AIC)** *can be used to determine the relative predictive power and goodness of model fit though an estimation of error. Its value indicates the quality of a model relative to other models in a set. A smaller AIC is usually better, however an AIC value cannot be considered out of context. The AIC value alone does not give an indication of the model quality, but is only useful when compared to related models. It estimated the amount of information lost from a model and includes trade-offs between goodness of fit  and the simplicity of the model. Thus, one of the great benefits of the AIC is that it penalizes overfitting and the addition of more parameters. 
+**Akaike information criterion (AIC)** *can be used to determine the relative predictive power and goodness of model fit though an estimation of error. Its value indicates the quality of a model relative to other models in a set. A smaller AIC is usually better, however an AIC value cannot be considered out of context. The AIC value alone does not give an indication of the model quality, but is only useful when compared to related models. It estimates the amount of information lost from a model and includes trade-offs between goodness of fit  and the simplicity of the model. Thus, one of the great benefits of the AIC is that it penalizes overfitting and the addition of more parameters. 
 For models with small sample sizes the AIC often selects models with too many parameters (overfitting). Thus the **AICc**, which is an AIC with a correction for small sample sizes, should be used when modelling small sample sizes. It invokes a greater penalty than AIC for each additional parameter estimated, which offers greater ‘protection’ against overfitting.* 
 
 **Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
@@ -145,7 +158,7 @@ For models with small sample sizes the AIC often selects models with too many pa
 -	*Find the **true model**, with the assumptions that fit reality closest, use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)*
 ---
 
-It is often good practice to include both the AIC and the BIC into your model selection process and compare their evaluation of the model. However for simplicities sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. 
+It is often good practice to include both the AIC and the BIC into your model selection process and compare their evaluation of the model. However for simplicity's sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. 
 
 <a name="3.4 Model Creation"></a>
 ### 3.4 Model Creation 
@@ -175,7 +188,7 @@ plot(model.1)               # Model assumptions are met, some outliers,
 shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
-The degree of unequal variance (heteroscedacity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedactiy present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of th residuals are following a linear pattern. 
+The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticitypresent is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
 To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is `significant´ (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.  
 
 > **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis) shows some good examples and explains the interpretation of residuals nicely.*
@@ -206,7 +219,7 @@ model.7 <- lm(log.ht ~ temp + rain + isotherm, data=traits)     # Include isothe
 model.8 <- lm(log.ht ~ temp + rain + hemisphere + LAI + alt + NPP + isotherm, data=traits) # Include all
 ##...
 
-AIC(model.null, model.1, model.3, model.4, model.5, model.6, model.7, model.8)            
+AIC(model.null, model.1, model.2, model.3, model.4, model.5, model.6, model.7, model.8)            
 ```
 > **_NOTE_**: *While it is generally better to keep the number of predictors as low as possible to avoid overfitting, a general rule to determine the maximum number of predictors used is the `rule of ten´: you should have at least 10 times as many data points as parameters you are trying to estimate.*  
 
@@ -217,6 +230,7 @@ After we have build all the models we want to evaluate, we check their AIC to de
            df      AIC
 model.null  2 719.5867
 model.1     3 671.2654
+model.2     4 657.9293
 model.3     5 659.8009
 model.4     5 636.9401
 model.5     5 639.2953
@@ -230,7 +244,7 @@ In AIC.default(model.null, model.1, model.3, model.4, model.5, model.6,  :
 ```
 
 Thus we have determined model.4 is has the best model fit.  
-> **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. To avoid this it can be helpful to clean your data first. This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
+> **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. To avoid this it can be helpful to clean your data first (e.g. using `na.omit(). This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
 
 Now we can check the residuals again to see if it meet the assumptions of linear regression. 
 ```
@@ -264,8 +278,6 @@ However, the plant traits data set includes parameters that are not of ecologica
 Thus a subset of variables to be tested can be defined: 
 
 ```
-library(MASS)
-#install.packages("MASS")
 step.model <- lm(log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm, data=traits)
 ```
 We can feed this model into the stepwise function we have selected now: 
@@ -280,9 +292,6 @@ Most R SRA packages include a function for **both**, where selection carried out
 Including `trace = TRUE prints out all the steps that R performs. 
 
 ```
-library(olsrr)
-#install.packages("olsrr")
-
 step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")
 ```
 The output of this function shows the stepwise addition and removal performed and the connected change in AIC. 
@@ -408,29 +417,33 @@ plot(SRA)
 <p align="center"><img src="https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png" />
 <p align="center"> *Figure 3. Stepwise Regression Analysis to determine best subset for plant height.* </p>
 
-As you can see, this is a bottom-up approach and it comes to a different conclusion, becasue it does not check all the variables. If we were to enter the parameters in the `step.model` in a different order, the program might come to an entirely different conclusion. This is one of the problems of SRA, and this makes it important to alsways critically evaluate the output of computed SRA results!
+As you can see, this is a bottom-up approach and it comes to a different conclusion, becasue it does not check all the variables. If we were to enter the parameters in the `step.model` in a different order, the program might come to an entirely different conclusion. This is one of the problems of SRA, and this makes it important to critically evaluate the output of computed SRA results!
 
 After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
 
 <a name="5. HRA and SRA: Advantages and Drawbacks"></a>
 ## 5. HRA and SRA: Advantages and Drawbacks 
 
-HRA has the advantage that you decide, based on scientific reasoning which parameters to include at what stage. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling. 
-While SRA is one of the most common methods used in ecological and environmental studies, is has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006). 
+HRA has the advantage that it allows you to decide which parameters to include at what stage, based on scientific reasoning. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling. 
+While SRA is one of the most common methods used in ecological and environmental studies, it has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006). 
 
 Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered when you are evaluating your results are: 
--	**Parameter bias**: parameter selection is based on testing whether parameters are significantly different from zero, this can lead to biases in parameters, over-fitting and incorrect significance tests. (You could see that with the SRA performed using the olsrr package.)
+-	**Parameter bias**: parameter selection is based on testing whether parameters are significantly different from zero, this can lead to biases in parameters, over-fitting and incorrect significance tests. (You could see that with the SRA performed using the olsrr package.)  
+  
 -	**Algorithm impacts**: the algorithm used (forward selection, backward elimination or stepwise), the order of parameter entry (or deletion), and the number of candidate parameters, can all affect the selected model.  
--	**Collinearity**:  SRA (and HRA) annot deal with intercorrelation of variables. Collinearity may lead to the program to disregard significant parameters.
--	**Best  model selection**: SRA aims to select the single best model, which is often not possible. Several viable options may exist 
--	The use of p-values, F and Chi-squared tests and R2 values in SRA is problematic and may not present the actual statistical significance of parameters. 
+  
+-	**Collinearity**:  SRA (and HRA) can not deal with intercorrelation of variables. Collinearity may lead to the program to disregard significant parameters.  
+  
+-	**Best  model selection**: SRA aims to select the single best model, which is often not possible. Several viable options may exist   
+  
+-	The use of p-values, F and Chi-squared tests and R2 values in SRA is problematic and may not present the actual statistical significance of parameters.   
 
 Thus, SRA should only be used cautiously! 
 However, it is easily computed (now that you know how to) and may provide some supplementary insights into the data you are exploring. 
 
 <a name="6. Challenge"></a>
 ## 6. Challenge
-If you haven’t had enough of HRA and SRA yet, you can try yourself at a data set from the [World Data Bank]() and find the best parameters to predict life expectancy. The data set, a starter script and solutions can be found in the linked [Github repository](). 
+If you haven’t had enough of HRA and SRA yet, you can try yourself at a data set from the [Data World](https://data.world) and find the best parameters to predict life expectancy. The data set, a starter script and solutions can be found in the linked [Github repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler). 
 
 <a name="7. Supplementary material "></a>
 ## 7. Supplementary material 
