@@ -128,7 +128,7 @@ While the data still does not look perfectly normally distributed it should be f
 ### 3.3 Selection Approach 
 Models can be compared using a range of different criteria, such as R2, AIC, AICc, BIC or others. It is important to consider your data and the goal of your model when choosing a selection criterion. measure of fit
 
-----
+---
 **Selection Criteria**  
 
 **R-squared (R2)** *quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as: 
@@ -143,7 +143,7 @@ For models with small sample sizes the AIC often selects models with too many pa
 **Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
 -	*Find the model that gives the best prediction (without assuming that any of the models are correct) use AIC*  
 -	*Find the **true model**, with the assumptions that fit reality closest, use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)*
-----
+---
 
 It is often good practice to include both the AIC and the BIC into your model selection process and compare their evaluation of the model. However for simplicities sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. 
 
