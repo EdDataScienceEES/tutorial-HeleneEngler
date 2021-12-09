@@ -1,5 +1,5 @@
-
-### Tutorial Aims
+# Hierarchical and Stepwise Regression Analysis 
+##Finding the best subset parameters for simple linear multiple regressions
 
 #### <a href="Tutorial Introduction"> 1. Tutorial Introduction </a>
 ##### <a href="Learning Outcomes"> Learning Outcomes </a>
