@@ -1,3 +1,9 @@
+---
+title: "Hierarchical and Stepwise Regression Analysis"
+output:
+  pdf_document: default
+  html_document: default
+---
 # Hierarchical and Stepwise Regression Analysis 
 ##Finding the best subset parameters for simple linear multiple regressions
 

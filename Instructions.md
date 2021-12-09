@@ -1,5 +1,5 @@
-# Hierarchical and Stepwise Regression Analysis Tutorial
-## Tutorial Assignment for Data Sciene for Ecologists at the University of Edinburgh
+# tutorial-instructions
+## Instructions for Tutorial Assignment
 
 The key final assignment for the Data Science course is to create your own tutorial. Your tutorial has to communicate a specific quantitative skill - you can choose the level at which you pitch your tutorial and how advanced or introductory it is. You can create "part 2" tutorials where "part 1" is an existing Coding Club tutorial.
 
