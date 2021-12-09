@@ -112,16 +112,18 @@ These assumptions are:
 It is important to check if these assumptions apply to our data before you start modelling, as well as after we have run the model, in the residuals. 
 
 So lets check the distribution of our dependent variable, plant height, with a histogram. 
+
 ```
 # Check data distribution
 ## Plot Histogram in basic R 
 hist(traits$height, breaks = 10) # non normal distribution, right skew
 ```
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/91228202/145286937-c6a575be-5c3f-4a1c-82d9-846114322ffe.png" />
-<p align="center"> *Figure 1. Distribution of plant height(m).* </p>
 
-We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. (2014) in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository). 
+![hist1](https://user-images.githubusercontent.com/91228202/145286937-c6a575be-5c3f-4a1c-82d9-846114322ffe.png)
+*Figure 1. Distribution of plant height(m).*
+
+We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. (2014) in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository).  
+
 
 ```
 # Log transforming data, to achieve normal distribution
