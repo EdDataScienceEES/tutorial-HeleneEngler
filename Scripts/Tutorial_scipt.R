@@ -16,10 +16,10 @@ library(MASS)       # Stepwise regression analsysis
 #install.packages("MASS")
 
 # Set your Working Directory 
-setwd("/Users/HeleneEngler/University/R/tutorial-HeleneEngler")
+setwd("set_your_own_filepath")
 
 # Load Data ----
-traits <- read.csv("Inputs/plant_traits.csv")
+traits <- read.csv("plant_traits.csv")
 
 # Explore Data Frame (df) ----
 head(traits)
@@ -72,7 +72,7 @@ model.7 <- lm(log.ht ~ temp + rain + isotherm, data=traits)     # Include isothe
 model.8 <- lm(log.ht ~ temp + rain + hemisphere + LAI + alt + NPP + isotherm, data=traits) # Include all
 ##...
 
-AIC(model.null, model.1, model.3, model.4, model.5, model.6, model.7, model.8)                
+AIC(model.null, model.1, model.2, model.3, model.4, model.5, model.6, model.7, model.8)                
 
 # Check residuals 
 resid4 <-  resid(model.4)
@@ -98,6 +98,7 @@ step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")    # both di
 ## only works with the 'all model' 
 
 # SRA with olsrr package
-SRA <- ols_step_best_subset(step.model)
+SRA <- ols_step_both_aic(step.model, progress = TRUE, details = TRUE)
 SRA
 plot(SRA)
+jpeg("Outputs/olsrr_SRA.jpeg")
