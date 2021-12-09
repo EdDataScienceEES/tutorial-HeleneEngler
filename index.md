@@ -15,8 +15,8 @@
 ##### <a href="3.4 Model Creation "> 3.4 Model Creation </a>
 
 #### <a href="Stepwise regression analysis"> 4. Stepwise regression analysis </a>
-#### <a href="7.1 MASS package "> 4.1 MASS package </a>
-#### <a href="7.2 olsrr package "> 4.2 olsrr package </a>
+##### <a href="7.1 MASS package "> 4.1 MASS package </a>
+##### <a href="7.2 olsrr package "> 4.2 olsrr package </a>
 
 #### <a href="HRA and SRA: Advantages and Drawbacks"> 5. HRA and SRA: Advantages and Drawbacks </a>
 
