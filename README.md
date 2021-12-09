@@ -33,6 +33,8 @@ Assignment Instructions
 #### index.md
 Markdown file used to create the tutorial website 
 
+### Feedback 
+Filotheea Moldovan gave me some individual feedback and formatting advice which is integrated in the tutorial. 
 
 
 
