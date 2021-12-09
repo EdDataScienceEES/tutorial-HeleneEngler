@@ -385,7 +385,7 @@ You can see that the last model does not improve any further, so the SRA is fini
 
 <a name="4.1 olsrr package"></a>
 ### 4.1 olsrr package
-Using the `olsrr` package is even more simple. It includes several functions for SRA, we will use ` ols_step_both_aic()` which compares models based on their AIC. It performs both the backwards and forwards SRA. 
+Using the `olsrr` package is even more simple. It includes several functions for SRA, we will use `ols_step_both_aic()` which compares models based on their AIC. It performs both the backwards and forwards SRA. 
 
 ```
 SRA <- ols_step_both_aic(step.model, progress = TRUE, details = TRUE)
