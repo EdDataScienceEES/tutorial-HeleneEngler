@@ -2,21 +2,21 @@
 # Hierarchical and Stepwise Regression Analysis 
 ## Finding the best subset parameters for simple linear multiple regressions
 
-#### <a href="Tutorial Introduction"> 1. Tutorial Introduction </a>
+#### <a href="1. Tutorial Introduction"> 1. Tutorial Introduction </a>
 ##### <a href="Learning Outcomes"> Learning Outcomes </a>
 ##### <a href="Requiremed Skills"> Requiremed Skills </a>
 
-#### <a href="From linear models to hierarchical regression analysis"> 2. From linear models to hierarchical regression analysis </a>
+#### <a href="2. From linear models to hierarchical regression analysis"> 2. From linear models to hierarchical regression analysis </a>
 
-#### <a href="Hierarchical Regression Analysis"> 3. Hierarchical Regression Analysis </a>
+#### <a href="3. Hierarchical Regression Analysis"> 3. Hierarchical Regression Analysis </a>
 ##### <a href="3.1 Setting a Research Question"> 3.1 Setting a Research Question </a>
 ##### <a href="3.2 Checking assumptions"> 3.2 Checking assumptions </a>
 ##### <a href="3.3 Selection Approach "> 3.3 Selection Approach </a>
 ##### <a href="3.4 Model Creation "> 3.4 Model Creation </a>
 
 #### <a href="Stepwise regression analysis"> 4. Stepwise regression analysis </a>
-##### <a href="7.1 MASS package "> 4.1 MASS package </a>
-##### <a href="7.2 olsrr package "> 4.2 olsrr package </a>
+##### <a href="4.1 MASS package "> 4.1 MASS package </a>
+##### <a href="4.2 olsrr package "> 4.2 olsrr package </a>
 
 #### <a href="HRA and SRA: Advantages and Drawbacks"> 5. HRA and SRA: Advantages and Drawbacks </a>
 
