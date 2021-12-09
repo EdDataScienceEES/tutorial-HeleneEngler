@@ -177,7 +177,7 @@ The QQ-plot shows that the residuals are relatively normally distributed, as the
 The degree of unequal variance (heteroscedacity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedactiy present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of th residuals are following a linear pattern. 
 To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is `significant´ (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.  
 
-> **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis)shows some good examples and explains the interpretation of residuals nicely.*
+> **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis) shows some good examples and explains the interpretation of residuals nicely.*
 
 Now we can compare ´model.1´ to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
 
@@ -253,10 +253,7 @@ However, we have not checked all possible variations. As we have a big number of
 
 While in HRA you decide what terms to enter at which stage, stepwise regression analysis (SRA) is an automated process in which the program enters and discards terms based on the criterion you selected (e.g. R2, AIC, BIC). 
 
-There are many packages that can perform SRA in R. We will use ´ls_step from the ´olsrr´ package. 
-
-The requirements for SRA are the same as for HRA. Thus the data distribution and residuals have to be checked! 
-
+There are many packages that can perform SRA in R. We will use ´ls_step from the ´olsrr´ package. The requirements for SRA are the same as for HRA. Thus the data distribution and residuals have to be checked! 
 First we define the model we want to evaluate. To include all parameters into the model it may be constructed like this: 
 
 ```
@@ -276,21 +273,127 @@ SRA can be performed forwards and backwards. **Forward** selection is a *bottom-
 
 > **_NOTE:_** *Forward stepwise selection is usually more suitable when the number of variables is bigger than the sample size.*
 
-Most R SRA packages include a function for `both´, where selection carried out in both directions. This is what we will use here. 
-Including ´trace = TRUE´ prints out all the steps that R performs. 
+Most R SRA packages include a function for **both**, where selection carried out in both directions. This is what we will use here. 
+Including `trace = TRUE prints out all the steps that R performs. 
 
 ```
 step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")
 ```
-The SRA comes to the same conclusion as we did. 
+The output of this function shows the stepwise addition and removal performed and the connected change in AIC. 
+```
+> step_traits <- stepAIC(step.model, trace = TRUE, direction= "both")    # both directions
+Start:  AIC=152.86
+log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm
+
+             Df Sum of Sq    RSS    AIC
+- NPP         1    0.1109 381.25 150.91
+- isotherm    1    0.9561 382.10 151.29
+- alt         1    1.5097 382.65 151.54
+- hemisphere  1    1.6368 382.78 151.59
+<none>                    381.14 152.86
+- LAI         1    5.9987 387.14 153.54
+- rain        1    8.3926 389.53 154.60
+- temp        1   20.0341 401.18 159.67
+
+Step:  AIC=150.91
+log.ht ~ alt + temp + rain + LAI + hemisphere + isotherm
+
+             Df Sum of Sq    RSS    AIC
+- isotherm    1    1.0594 382.31 149.38
+- hemisphere  1    1.5265 382.78 149.59
+- alt         1    1.5761 382.83 149.62
+<none>                    381.25 150.91
+- LAI         1    7.9359 389.19 152.45
+- rain        1    8.7205 389.97 152.80
++ NPP         1    0.1109 381.14 152.86
+- temp        1   21.0108 402.26 158.13
+
+Step:  AIC=149.38
+log.ht ~ alt + temp + rain + LAI + hemisphere
+
+             Df Sum of Sq    RSS    AIC
+- alt         1    1.0667 383.38 147.86
+- hemisphere  1    2.2665 384.58 148.40
+<none>                    382.31 149.38
+- rain        1    7.6794 389.99 150.81
++ isotherm    1    1.0594 381.25 150.91
+- LAI         1    8.2567 390.57 151.06
++ NPP         1    0.2142 382.10 151.29
+- temp        1   31.5698 413.88 161.03
+
+Step:  AIC=147.86
+log.ht ~ temp + rain + LAI + hemisphere
+
+             Df Sum of Sq    RSS    AIC
+- hemisphere  1    2.1502 385.53 146.82
+<none>                    383.38 147.86
+- LAI         1    7.5373 390.92 149.21
++ alt         1    1.0667 382.31 149.38
++ isotherm    1    0.5500 382.83 149.62
+- rain        1    8.5719 391.95 149.67
++ NPP         1    0.2534 383.13 149.75
+- temp        1   30.7394 414.12 159.13
+
+Step:  AIC=146.83
+log.ht ~ temp + rain + LAI
+
+             Df Sum of Sq    RSS    AIC
+<none>                    385.53 146.82
++ hemisphere  1    2.1502 383.38 147.86
+- LAI         1    7.5703 393.10 148.17
++ isotherm    1    1.1141 384.42 148.33
++ alt         1    0.9504 384.58 148.40
++ NPP         1    0.0283 385.50 148.81
+- rain        1    9.0676 394.60 148.82
+- temp        1   29.4364 414.97 157.48
+```
+You can see that the last model does not improve any further, so the SRA is finished. The MASS SRA comes to the same conclusion as we did: The variables that best predict plant height are temperature, rain and Leaf area index.  
 
 <a name="4.1 olsrr package"></a>
 ### 4.1 olsrr package
-Using the olsrr package is even more simple. It includes several functions for SRA, we will use ` ols_step_best_subset()´ which compares models based on their AIC and is also bi-directional. 
+Using the `olsrr package is even more simple. It includes several functions for SRA, we will use ` ols_step_best_subset()` which compares models based on their AIC. 
 
 ```
 SRA <- ols_step_best_subset(step.model)
 SRA
+```
+It shows us a nice outputs table: 
+```
+> SRA <- ols_step_best_subset(step.model)
+> SRA
+                Best Subsets Regression                 
+--------------------------------------------------------
+Model Index    Predictors
+--------------------------------------------------------
+     1         NPP                                       
+     2         temp rain                                 
+     3         temp rain isotherm                        
+     4         temp rain LAI hemisphere                  
+     5         alt temp rain LAI hemisphere              
+     6         alt temp rain LAI hemisphere isotherm     
+     7         alt temp rain LAI NPP hemisphere isotherm 
+--------------------------------------------------------
+
+                                                    Subsets Regression Summary                                                    
+----------------------------------------------------------------------------------------------------------------------------------
+                       Adj.        Pred                                                                                            
+Model    R-Square    R-Square    R-Square     C(p)        AIC         SBIC        SBC         MSEP       FPE       HSP       APC  
+----------------------------------------------------------------------------------------------------------------------------------
+  1        0.2481      0.2437      0.2314    14.3031    649.1698    160.8225    658.6123    428.6642    2.5212    0.0147    0.7696 
+  2        0.3085      0.3006      0.2861     0.7574    657.9293    152.9674    670.6564    408.3912    2.3329    0.0132    0.7152 
+  3        0.3158      0.3040       0.286     0.9175    658.0234    153.2093    673.9323    406.3773    2.3342    0.0132    0.7156 
+  4        0.3196      0.3033      0.2776     2.9626    637.9781    150.2862    656.8630    394.9000    2.3624    0.0138    0.7211 
+  5        0.3215      0.3011      0.2706     4.5036    639.4988    151.9267    661.5313    396.1879    2.3834    0.0140    0.7275 
+  6        0.3234      0.2988      0.2645     6.0477    641.0216    153.5807    666.2015    397.4991    2.4047    0.0141    0.7340 
+  7        0.3236      0.2947      0.2555     8.0000    642.9715    155.6324    671.2990    399.8215    2.4321    0.0143    0.7424 
+----------------------------------------------------------------------------------------------------------------------------------
+AIC: Akaike Information Criteria 
+ SBIC: Sawa's Bayesian Information Criteria 
+ SBC: Schwarz Bayesian Criteria 
+ MSEP: Estimated error of prediction, assuming multivariate normality 
+ FPE: Final Prediction Error 
+ HSP: Hocking's Sp 
+ APC: Amemiya Prediction Criteria
 ```
 We can visualise the change in AIC for each step with the ´plot()´ function. 
 ```
@@ -299,6 +402,8 @@ plot(SRA)
 <p align="center"><img src="https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png" />
 <p align="center"> *Figure 3. Stepwise Regression Analysis to determine best subset for plant height.* </p>
 
+As you can see, this is a bottom-up approach and it comes to a different conclusion, becasue it does not check all the variables. If we were to enter the parameters in the `step.model` in a different order, the program might come to an entirely different conclusion. This is one of the problems of SRA, and this makes it important to alsways critically evaluate the output of computed SRA results!
+
 After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
 
 <a name="5. HRA and SRA: Advantages and Drawbacks"></a>
@@ -306,11 +411,12 @@ After computing a SRA the residuals of the resulting model have to be checked an
 
 HRA has the advantage that you decide, based on scientific reasoning which parameters to include at what stage. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling. 
 While SRA is one of the most common methods used in ecological and environmental studies, is has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006). 
+
 Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered when you are evaluating your results are: 
--	Parameter bias: parameter selection is based on testing whether parameters are significantly different from zero, this can lead to biases in parameters, over-fitting and incorrect significance tests. 
--	Algorithm impacts: the algorithm used (forward selection, backward elimination or stepwise), the order of parameter entry (or deletion), and the number of candidate parameters, can all affect the selected model.  
--	Collinearity:  cannot deal with intercorrelation of variables. Collinearity may lead to the program to disregard significant parameters
--	Best  model selection: SRA aims to select the single best model, which is often not possible. Several viable options may exist 
+-	**Parameter bias**: parameter selection is based on testing whether parameters are significantly different from zero, this can lead to biases in parameters, over-fitting and incorrect significance tests. (You could see that with the SRA performed using the olsrr package.)
+-	**Algorithm impacts**: the algorithm used (forward selection, backward elimination or stepwise), the order of parameter entry (or deletion), and the number of candidate parameters, can all affect the selected model.  
+-	**Collinearity**:  SRA (and HRA) annot deal with intercorrelation of variables. Collinearity may lead to the program to disregard significant parameters.
+-	**Best  model selection**: SRA aims to select the single best model, which is often not possible. Several viable options may exist 
 -	The use of p-values, F and Chi-squared tests and R2 values in SRA is problematic and may not present the actual statistical significance of parameters. 
 
 Thus, SRA should only be used cautiously! 
