@@ -449,8 +449,8 @@ We can visualise the change in AIC for each step with the ´plot()´ function.
 ```
 plot(SRA)
 ```
-<p align="center"><img src="https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png" />
-<p align="center"> *Figure 4. Stepwise Regression Analysis to determine best subset for plant height.* </p>
+![SRA](https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png)
+*Figure 4. Stepwise Regression Analysis to determine best subset for plant height.*
 
 This function comes to the same conclusion as the `MASS` package and the HRA. 
 But remember: After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
