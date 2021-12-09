@@ -188,19 +188,21 @@ plot(model.1)               # Model assumptions are met, some outliers,
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
+
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
-The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticitypresent is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
-To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is `significant´ (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.  
+The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
+To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is `significant´ (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.
 
-> **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis) shows some good examples and explains the interpretation of residuals nicely.*
+> **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail and you **NEVER** include the residual plots. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis) shows some good examples and explains the interpretation of residuals nicely.*
 
-Now we can compare ´model.1´ to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
+Now we can compare `model.1 to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
 
 ```
 # Check predcitive power 
 AIC(model.null, model.1)
 ```
 This returns the AIC of the null model and `model.1`.
+
 ```
 > AIC(model.null, model.1)
            df      AIC
@@ -368,49 +370,65 @@ You can see that the last model does not improve any further, so the SRA is fini
 
 <a name="4.1 olsrr package"></a>
 ### 4.1 olsrr package
-Using the `olsrr package is even more simple. It includes several functions for SRA, we will use ` ols_step_best_subset()` which compares models based on their AIC. 
+Using the `olsrr` package is even more simple. It includes several functions for SRA, we will use ` ols_step_both_aic()` which compares models based on their AIC. It performs both the backwards and forwards SRA. 
 
 ```
-SRA <- ols_step_best_subset(step.model)
+SRA <- ols_step_both_aic(step.model, progress = TRUE, details = TRUE)
 SRA
 ```
-It shows us a nice outputs table: 
-```
-> SRA <- ols_step_best_subset(step.model)
-> SRA
-                Best Subsets Regression                 
---------------------------------------------------------
-Model Index    Predictors
---------------------------------------------------------
-     1         NPP                                       
-     2         temp rain                                 
-     3         temp rain isotherm                        
-     4         temp rain LAI hemisphere                  
-     5         alt temp rain LAI hemisphere              
-     6         alt temp rain LAI hemisphere isotherm     
-     7         alt temp rain LAI NPP hemisphere isotherm 
---------------------------------------------------------
+Set `progress = TRUE` and `details = TRUE` to get a full report on the step by step addition and removal of parameters. 
 
-                                                    Subsets Regression Summary                                                    
-----------------------------------------------------------------------------------------------------------------------------------
-                       Adj.        Pred                                                                                            
-Model    R-Square    R-Square    R-Square     C(p)        AIC         SBIC        SBC         MSEP       FPE       HSP       APC  
-----------------------------------------------------------------------------------------------------------------------------------
-  1        0.2481      0.2437      0.2314    14.3031    649.1698    160.8225    658.6123    428.6642    2.5212    0.0147    0.7696 
-  2        0.3085      0.3006      0.2861     0.7574    657.9293    152.9674    670.6564    408.3912    2.3329    0.0132    0.7152 
-  3        0.3158      0.3040       0.286     0.9175    658.0234    153.2093    673.9323    406.3773    2.3342    0.0132    0.7156 
-  4        0.3196      0.3033      0.2776     2.9626    637.9781    150.2862    656.8630    394.9000    2.3624    0.0138    0.7211 
-  5        0.3215      0.3011      0.2706     4.5036    639.4988    151.9267    661.5313    396.1879    2.3834    0.0140    0.7275 
-  6        0.3234      0.2988      0.2645     6.0477    641.0216    153.5807    666.2015    397.4991    2.4047    0.0141    0.7340 
-  7        0.3236      0.2947      0.2555     8.0000    642.9715    155.6324    671.2990    399.8215    2.4321    0.0143    0.7424 
-----------------------------------------------------------------------------------------------------------------------------------
-AIC: Akaike Information Criteria 
- SBIC: Sawa's Bayesian Information Criteria 
- SBC: Schwarz Bayesian Criteria 
- MSEP: Estimated error of prediction, assuming multivariate normality 
- FPE: Final Prediction Error 
- HSP: Hocking's Sp 
- APC: Amemiya Prediction Criteria
+> **_NOTE_**: *Make sure to always have a look at the way and the order the program removed or added parameters, to avoid mistakes.* 
+
+Calling the function shows us a long outputs table detailing the step by step comparison process. I am just showing the last step, where the final model was determined. The function also return a model sumary and an ANOVA table for the final model.   
+```
+Step 5 : AIC = 636.9401 
+ log.ht ~ temp + rain + LAI 
+
+                           Enter New Variables                         
+-----------------------------------------------------------------------
+Variable      DF      AIC      Sum Sq       RSS      R-Sq     Adj. R-Sq 
+-----------------------------------------------------------------------
+hemisphere     1    637.978    180.098    383.379    0.320        0.303 
+isotherm       1    638.442    179.062    384.415    0.318        0.301 
+alt            1    638.516    178.898    384.579    0.317        0.301 
+-----------------------------------------------------------------------
+
+
+No more variables to be added or removed.
+
+Final Model Output 
+------------------
+                         Model Summary                          
+---------------------------------------------------------------
+R                       0.562       RMSE                 1.515 
+R-Squared               0.316       Coef. Var          148.615 
+Adj. R-Squared          0.304       MSE                  2.295 
+Pred R-Squared          0.281       MAE                  1.198 
+---------------------------------------------------------------
+ RMSE: Root Mean Square Error 
+ MSE: Mean Square Error 
+ MAE: Mean Absolute Error 
+
+                               ANOVA                                 
+--------------------------------------------------------------------
+               Sum of                                               
+              Squares         DF    Mean Square      F         Sig. 
+--------------------------------------------------------------------
+Regression    177.948          3         59.316    25.848    0.0000 
+Residual      385.530        168          2.295                     
+Total         563.477        171                                    
+--------------------------------------------------------------------
+
+                                  Parameter Estimates                                    
+----------------------------------------------------------------------------------------
+      model      Beta    Std. Error    Std. Beta      t        Sig      lower     upper 
+----------------------------------------------------------------------------------------
+(Intercept)    -1.132         0.318                 -3.564    0.000    -1.759    -0.505 
+       temp     0.055         0.015        0.280     3.582    0.000     0.025     0.086 
+       rain     0.000         0.000        0.197     1.988    0.048     0.000     0.001 
+        LAI     0.255         0.140        0.179     1.816    0.071    -0.022     0.532 
+----------------------------------------------------------------------------------------
 ```
 We can visualise the change in AIC for each step with the ´plot()´ function. 
 ```
@@ -419,9 +437,8 @@ plot(SRA)
 <p align="center"><img src="https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png" />
 <p align="center"> *Figure 3. Stepwise Regression Analysis to determine best subset for plant height.* </p>
 
-As you can see, this is a bottom-up approach and it comes to a different conclusion, becasue it does not check all the variables. If we were to enter the parameters in the `step.model` in a different order, the program might come to an entirely different conclusion. This is one of the problems of SRA, and this makes it important to critically evaluate the output of computed SRA results!
-
-After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
+This function comes to the same conclusion as the `MASS` package and the HRA. 
+But remember: After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
 
 <a name="5. HRA and SRA: Advantages and Drawbacks"></a>
 ## 5. HRA and SRA: Advantages and Drawbacks 
