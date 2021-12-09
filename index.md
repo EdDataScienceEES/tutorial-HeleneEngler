@@ -119,7 +119,8 @@ So lets check the distribution of our dependent variable, plant height, with a h
 hist(traits$height, breaks = 10) # non normal distribution, right skew
 ```
 
-![hist1](https://user-images.githubusercontent.com/91228202/145286937-c6a575be-5c3f-4a1c-82d9-846114322ffe.png)
+![hist1](https://user-images.githubusercontent.com/91228202/145286937-c6a575be-5c3f-4a1c-82d9-846114322ffe.png)  
+
 *Figure 1. Distribution of plant height(m).*
 
 We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. (2014) in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository).  
@@ -134,8 +135,9 @@ traits <-  traits %>%
 hist(traits$log.ht, breaks = 10) # close to normal
 ```
 
-<p align="center"><img src="https://user-images.githubusercontent.com/91228202/145290312-9a44c8b6-deba-4920-9198-26513ce34dfe.png" />
-<p align="center"> *Figure 2. Distribution of log[plant height(m)].* </p>
+![hist2](https://user-images.githubusercontent.com/91228202/145290312-9a44c8b6-deba-4920-9198-26513ce34dfe.png)  
+
+*Figure 2. Distribution of log[plant height(m)].*
 
 While the data still does not look perfectly normally distributed it should be fine for modelling. Perfect normal distributions are rare in environmental data and linear models are not that sensitive to slight abnormalities in distribution. However, it is important to check the residuals of the model we will build, to be able to prove the validity of your statistical method. 
 
