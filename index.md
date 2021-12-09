@@ -145,9 +145,11 @@ Models can be compared using a range of different criteria, such as R2, AIC, AIC
 ---
 **Selection Criteria**  
 
-**R-squared (R2)** *quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as: 
-<img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png"> </center> 
-Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.  
+**R-squared (R2)** *quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as:*  
+
+<img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png"> </center>  
+
+*Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.  
 Drawbacks of R2 values include that it does not indicate bias in predictions and is susceptible to overfitting and data mining. It always needs to be examined in combination with residual plots! 
 To learn more about the adjusted R2 and how to use it, you can read [this blogpost]( https://statisticsbyjim.com/regression/interpret-adjusted-r-squared-predicted-r-squared-regression/).*
 
@@ -188,10 +190,15 @@ plot(model.1)               # Model assumptions are met, some outliers,
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
-
+<p float="left">
+  <img src="https://user-images.githubusercontent.com/91228202/145438689-1e33562b-a4d4-4534-b416-13e2acf18f7d.png" width="100" />
+  <img src="https://user-images.githubusercontent.com/91228202/145438819-1225115e-daec-4f34-b763-edc627ad68e7.png" width="100" /> 
+  <img src="https://user-images.githubusercontent.com/91228202/145439003-d80efe59-5bac-4265-91c1-37d3700c26b8.png" />
+  <img src="https://user-images.githubusercontent.com/91228202/145438908-e16bcd2f-eb3b-40c1-aea4-709e9e9e3d68.png" />
+</p>
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
 The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
-To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is `significant´ (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.
+To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is *significant* (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.
 
 > **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail and you **NEVER** include the residual plots. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis) shows some good examples and explains the interpretation of residuals nicely.*
 
