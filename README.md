@@ -5,7 +5,6 @@ by Helene Engler
 m.helene.engler@sms.ed.ac.uk
 
 The tutorial can be accessed as a website here: https://eddatascienceees.github.io/tutorial-HeleneEngler/
-(There is some error from secton 3.2 onwards, I could not figure out how to fix it. the index.md file is properly formatted) 
 
 ### Repository contents:
 
