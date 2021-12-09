@@ -191,10 +191,10 @@ plot(model.1)               # Model assumptions are met, some outliers,
 shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 ```
 <p float="left">
-  <img src="https://user-images.githubusercontent.com/91228202/145438689-1e33562b-a4d4-4534-b416-13e2acf18f7d.png" width="250" />
-  <img src="https://user-images.githubusercontent.com/91228202/145438819-1225115e-daec-4f34-b763-edc627ad68e7.png" width="250" /> 
-  <img src="https://user-images.githubusercontent.com/91228202/145439003-d80efe59-5bac-4265-91c1-37d3700c26b8.png" width="250"/>
-  <img src="https://user-images.githubusercontent.com/91228202/145438908-e16bcd2f-eb3b-40c1-aea4-709e9e9e3d68.png" width="250"/>
+  <img src="https://user-images.githubusercontent.com/91228202/145438689-1e33562b-a4d4-4534-b416-13e2acf18f7d.png" width="240" />
+  <img src="https://user-images.githubusercontent.com/91228202/145438819-1225115e-daec-4f34-b763-edc627ad68e7.png" width="240" /> 
+  <img src="https://user-images.githubusercontent.com/91228202/145439003-d80efe59-5bac-4265-91c1-37d3700c26b8.png" width="240"/>
+  <img src="https://user-images.githubusercontent.com/91228202/145438908-e16bcd2f-eb3b-40c1-aea4-709e9e9e3d68.png" width="240"/>
 </p>
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
 The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
