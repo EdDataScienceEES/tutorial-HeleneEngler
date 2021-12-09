@@ -19,7 +19,7 @@ library(MASS)       # Stepwise regression analsysis
 setwd("/Users/HeleneEngler/University/R/tutorial-HeleneEngler")
 
 # Load Data ----
-traits <- read.csv("plant_traits.csv")
+traits <- read.csv("Inputs/plant_traits.csv")
 
 # Explore Data Frame (df) ----
 head(traits)
