@@ -8,7 +8,7 @@
 #### <a href="From linear models to hierarchical regression analysis"> 2. From linear models to hierarchical regression analysis </a>
 
 #### <a href="Hierarchical Regression Analysis"> 3. Hierarchical Regression Analysis </a>
-##### <a href="3.1 Setting a hypothesis"> 3.1 Setting a hypothesis </a>
+##### <a href="3.1 Setting a Research Question"> 3.1 Setting a Research Question </a>
 ##### <a href="3.2 Checking assumptions"> 3.2 Checking assumptions </a>
 ##### <a href="3.3 Selection Approach "> 3.3 Selection Approach </a>
 ##### <a href="3.4 Model Creation "> 3.4 Model Creation </a>
@@ -26,8 +26,10 @@
 #### <a href="References"> 8. References </a>
 
 ---------------------------
+
 <a name="1. Introduction"></a>
 ## 1. Introduction
+
 This tutorial is designed for R users who want to learn how to use **hierarchical and stepwise regression analysis**, to **identify significant and powerful predictors** influencing your explanatory variable from a bigger number of potential variables. 
 
 <a name="Learning Outcomes"></a>
@@ -58,15 +60,12 @@ While this selection process should always be based on **scientific reasoning** 
 <a name="3. Hierarchical Regression Analysis "></a>
 ## 3. Hierarchical Regression Analysis 
 
-<a name="3.1 Setting a hypothesis "></a>
-### 3.1 Setting a hypothesis  
-Determining a research question and setting a hypothesis before the statistical analysis of your data is always imperative for good science. Because HRA is used to find the best subset of predictors it is usually advisable to set a non-directional, rather than a directional hypothesis (also called experimental hypothesis). 
+<a name="3.1 Setting a Research Question "></a>
+### 3.1 Setting a Research Question  
+Determining a research question and setting a hypothesis before the statistical analysis of your data is always imperative for good science. It ensures a structured, focused work flow and reduces the risk of *researcher bias* and *significance chasing* (=  the misuse of data analysis to find patterns in data that can be presented as statistically significant, which indreases type 1 errors). 
 
-> **_NOTE:_** *directional hypothesis: 
-Non-directional hypothesis:*
-
-In this tutorial we will use a data on plant traits collected around the world. You can download the data from [this github repository]() and import it into a new R script. 
-A bit of preliminary analysis shows that the plant traits data set contains 36 observations for 178 different plant species. 
+In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen around the world and some connected environmental information, such as the locations rainfall, average temperature or the leaf areas indey measured at the plants location. You can download the plant_traits data seta as a CSV file [here]() and import it into a new R script. 
+A bit of preliminary analysis shows that the plant traits data set contains 18 observations (including plant height) for 178 different plant specimen. 
 
 ```
 # Load Data ----
@@ -78,8 +77,12 @@ str(traits)
 nrow(traits)
 ncol(traits)
 ```
+Because HRA is used to find the best subset of predictors it is usually advisable to set a non-directional, rather than a directional hypothesis (also called experimental hypothesis).
 
-Our **research goal** is to identify the best predictors for plant height out of the 35 possible predictor variables included in the data set. A non-directional **hypothesis** (or study intention) could be frased as: *The best subset of parameters influencing/ predicting plant height will be identified.*
+> **_NOTE:_** *A **directional hypothesis** includes a positive or negative prediction of the relationship, change or difference  between the studies dependent and independent variables. An example for the plant traits data would be e.g.: There is a significant positive relationship between temperature and plant height. 
+> A **Non-directional hypothesis** also makes a prediction of the relationship, change or difference, but does not include what that relationship is exactly. E.g. There is a significant relationship between temperature and plant height.*
+
+Our **research goal** is to identify the best predictors for plant height out of the 35 possible predictor variables included in the data set. A non-directional research intention could be frased as: *The best subset of parameters influencing/ predicting plant height will be identified.*
 
 <a name="3.2 Checking assumptions"></a>
 ### 3.2 Checking assumptions  
