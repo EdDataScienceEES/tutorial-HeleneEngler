@@ -95,7 +95,7 @@ ncol(traits)
 ```
 Because HRA is used to find the best subset of predictors it is usually advisable to set a non-directional, rather than a directional hypothesis (also called experimental hypothesis).
 
-> **_NOTE:_** *A **directional hypothesis** includes a positive or negative prediction of the relationship, change or difference  between the studies dependent and independent variables. An example for the plant traits data would be e.g.: There is a significant positive relationship between temperature and plant height. 
+> **_NOTE:_** *A **directional hypothesis** includes a positive or negative prediction of the relationship, change or difference  between the studies dependent and independent variables. An example for the plant traits data would be e.g.: There is a significant positive relationship between temperature and plant height.  
 > A **Non-directional hypothesis** also makes a prediction of the relationship, change or difference, but does not include what that relationship is exactly. E.g. There is a significant relationship between temperature and plant height.*
 
 Our **research goal** is to identify the best predictors for plant height out of the 17 possible predictor variables included in the data set. A non-directional research intention could be frased as: *The best subset of parameters influencing/predicting plant height will be identified.*
@@ -103,8 +103,8 @@ Our **research goal** is to identify the best predictors for plant height out of
 <a name="3.2 Checking assumptions"></a>
 ### 3.2 Checking assumptions  
 As mentioned above, HRA is based on linear regression and thus has to conform to the assumptions of linear regression. 
-These assumptions are: 
-1)	**Linearity**: The relationship between the response and explanatory variables is linear. 
+These assumptions are:  
+1)	**Linearity**: The relationship between the response and explanatory variables is linear.  
 2)	**Homoscedacity**: The variance in the residuals (or amount of error in the model) is similar at each point across the model (also called constant variance).  
 3)	**Normality**: The data is normally distributed.  
 4)	**No Multi-collinearity**: The predictor variables are not too highly correlated with each other.  
@@ -157,13 +157,13 @@ Models can be compared using a range of different criteria, such as R2, AIC, AIC
 <img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png">
 
 *Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.  
-Drawbacks of R2 values include that they do not indicate bias in predictions and are susceptible to overfitting and data mining. They always need to be examined in combination with residual plots! 
+Drawbacks of R2 values include that they do not indicate bias in predictions and are susceptible to overfitting and data mining. They always need to be examined in combination with residual plots!  
 To learn more about the adjusted R2 and how to use it, you can read [this blogpost]( https://statisticsbyjim.com/regression/interpret-adjusted-r-squared-predicted-r-squared-regression/).*
 
-**Akaike information criterion (AIC)** *can be used to determine the relative predictive power and goodness of model fit though an estimation of error. Its value indicates the quality of a model relative to other models in a set. A smaller AIC is usually better, however an AIC value cannot be considered out of context. The AIC value alone does not give an indication of the model quality, but is only useful when compared to related models. It estimates the amount of information lost from a model and includes trade-offs between goodness of fit  and the simplicity of the model. Thus, one of the great benefits of the AIC is that it penalizes overfitting and the addition of more parameters. 
+**Akaike information criterion (AIC)** *can be used to determine the relative predictive power and goodness of model fit though an estimation of error. Its value indicates the quality of a model relative to other models in a set. A smaller AIC is usually better, however an AIC value cannot be considered out of context. The AIC value alone does not give an indication of the model quality, but is only useful when compared to related models. It estimates the amount of information lost from a model and includes trade-offs between goodness of fit  and the simplicity of the model. Thus, one of the great benefits of the AIC is that it penalizes overfitting and the addition of more parameters.  
 For models with small sample sizes the AIC often selects models with too many parameters (overfitting). Thus the **AICc**, which is an AIC with a correction for small sample sizes, should be used when modelling small sample sizes. It invokes a greater penalty than AIC for each additional parameter estimated, which offers greater ‘protection’ against overfitting.* 
 
-**Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
+**Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:*  
 -	*If you want to find the model that gives the best prediction (without assuming that any of the models are correct), use the AIC*  
 -	*If you want to find the **true model**, with the assumptions that fit reality closest, use the BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into that)*
 
@@ -207,7 +207,7 @@ shapiro.test(resid1)        # p > 0.05, normally distributed residuals
 *Figure 3. Residuals of model.1.*
 
 The QQ-plot shows that the residuals are relatively normally distributed, as the majority of data points fall along the straight plotted line. 
-The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern. 
+The degree of unequal variance (heteroscedasticity) present is shown in the scale-location plot. While the red line is slightly bend and not perfectly straight, the heteroscedasticity present is not big enough to assume equal variance is not met. In the residuals vs leverage plot influential outliers are identified. While there are several present, none fall outside of Cook´s distance, which would mean they have to be removed, due to their disproportioal impact. The fitted vs residual plot again shows small non-linear trends, but the majority of the residuals are following a linear pattern.  
 To test the normality of the residuals a Shapiro-Wills test may be performed. This can be a bit confusing, because contrary to the p value in a t-test, this test is *significant* (indicative of a normal distribution) if p > 0.05. This is the case for the residuals of our model and confirms a normal distribution.
 
 > **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail and you **NEVER** include the residual plots. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis) shows some good examples and explains the interpretation of residuals nicely.*
@@ -458,16 +458,17 @@ plot(SRA)
 
 *Figure 4. Stepwise Regression Analysis to determine best subset for plant height.*
 
-This function comes to the same conclusion as the `MASS` package and the HRA. 
+This function comes to the same conclusion as the `MASS` package and the HRA.  
 But remember: After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
 
 <a name="5. HRA and SRA: Advantages and Drawbacks"></a>
 ## 5. HRA and SRA: Advantages and Drawbacks 
 
-HRA has the advantage that it allows you to decide which parameters to include at what stage, based on scientific reasoning. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options. 
-While SRA is one of the most common methods used in ecological and environmental studies that employ regressions, it has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006). 
+HRA has the advantage that it allows you to decide which parameters to include at what stage, based on scientific reasoning. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options.  
+While SRA is one of the most common methods used in ecological and environmental studies that employ regressions, it has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006).  
 
-Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered when you are evaluating your results are: 
+Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered when you are evaluating your results are:  
+
 -	**Parameter bias**: parameter selection is based on testing whether parameters are significantly different from zero, this can lead to biases in parameters, over-fitting and incorrect significance tests. (You could see that with the SRA performed using the olsrr package.)  
   
 -	**Algorithm impacts**: the algorithm used (forward selection, backward elimination or stepwise), the order of parameter entry (or deletion), and the number of candidate parameters, can all affect the selected model.  
@@ -479,7 +480,7 @@ Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered
 -	The use of p-values, F and Chi-squared tests and R2 values in SRA is problematic and may not present the actual statistical significance of parameters.   
 
 Thus, SRA should only be used cautiously! 
-However, it is easily computed (now that you know how to) and may provide some supplementary insights into the data you are exploring. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling. 
+However, it is easily computed (now that you know how to) and may provide some supplementary insights into the data you are exploring. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling.  
 If you are interested in reading more about current thoughts on SRA, its problems and alternatives in ecological statistics, I recommend you read the Wittingham et al.(2006) paper that can be found in the resources folder of this tutorial on GitHub. 
 
 <a name="6. Challenge"></a>
