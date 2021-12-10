@@ -244,7 +244,7 @@ AIC(model.null, model.1, model.2, model.3, model.4, model.5, model.6, model.7, m
 ```
 > **_NOTE_**: *While it is generally better to keep the number of predictors as low as possible to avoid overfitting, a general rule to determine the maximum number of predictors used is the `rule of ten´: you should have at least 10 times as many data points as parameters you are trying to estimate.*  
 
-After we have build all the models we want to evaluate, we check their AIC to determine which parameters should be kept and do not add to the power of the model. 
+After we have build all the models we want to evaluate, we check their AIC to determine which parameters should be kept and which do not add to the power of the model. 
 
 ```
 > AIC(model.null, model.1, model.3, model.4, model.5, model.6, model.7, model.8)                
@@ -263,11 +263,11 @@ Warning message:
 In AIC.default(model.null, model.1, model.3, model.4, model.5, model.6,  :
   models are not all fitted to the same number of observations
 ```
+From this output we see `model.4` has the lowest AIC and is thus likely to have the best model fit.  
 
-Thus we have determined `model.4 is has the best model fit.  
-> **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. To avoid this it can be helpful to clean your data first (e.g. using `na.omit(). This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
+> **_NOTE:_** *When comparing models be careful to make sure the same number of observations is used for each parameters (this will avoid the warning message that shows up), as some data sets have N/A values. It is good prcatice to clean your data before you start modelling (e.g. using `na.omit(). This [CC tutorial](https://ourcodingclub.github.io/tutorials/data-manip-efficient/) teaches you how to do that.* 
 
-Now we can check the residuals again to see if it meet the assumptions of linear regression. 
+Now we can check the residuals again to see if the assumptions of linear regression are met. 
 ```
 # Check residuals 
 resid4 <-  resid(model.4)
@@ -276,12 +276,12 @@ plot(model.4)               # Model assumptions are met, some outliers (e.g.6,96
                             # but none outside Cook´s distance (residuls vs leverage)
 shapiro.test(resid4)        # p>0.05 = normal distribution
 ```
-They do! 
+The residuals look acceptable! 
 
 #### Conclusion 
 Based on the HRA we have performed, the best subset of parameters to predict plant height are temperature, rain and Leaf area index.
 
-However, we have not checked all possible variations. As we have a big number of parameters, checking all possible combinations can take quite a long time. To make things faster we can use an automated computation process, that checks the models for us, step by step: **Stepwise Regression Analysis**
+However, we have not checked all possible variations. As we have a big number of parameters, checking all possible combinations can take quite a long time. To make things faster we can use an automated computation process that checks the models for us, step by step: **Stepwise Regression Analysis**
 
 <a name="4. Stepwise regression analysis"></a>
 ## 4. Stepwise regression analysis 
@@ -290,14 +290,14 @@ However, we have not checked all possible variations. As we have a big number of
 While in HRA you decide what terms to enter at which stage, stepwise regression analysis (SRA) is an automated process in which the program enters and discards terms based on the criterion you selected (e.g. R2, AIC, BIC). 
 
 There are many packages that can perform SRA in R. We will use ´ls_step from the ´olsrr´ package. The requirements for SRA are the same as for HRA. Thus the data distribution and residuals have to be checked! 
-First we define the model we want to evaluate. To include all parameters into the model it may be constructed like this: 
+
+First we define the model and the paramters we want to evaluate. If you want the SRA to consider all possible parameters it may be constructed like this: 
 
 ```
 all <- lm(log.ht ~ ., data=traits)
 ```
-However, the plant traits data set includes parameters that are not of ecological importance, such as the person taking the measurements, and categorical parameters. While these can be included into regression models, this is a bit more complex and we will focus on continuous variables.  
+However, the plant traits data set includes parameters that are not of ecological importance, such as the person taking the measurements, and other categorical parameters. While these can be included into regression models, this is a bit more complex and we will stay with the continuous variables in this tutorial.  
 Thus a subset of variables to be tested can be defined: 
-
 ```
 step.model <- lm(log.ht ~ alt + temp + rain + LAI + NPP + hemisphere + isotherm, data=traits)
 ```
@@ -305,9 +305,9 @@ We can feed this model into the stepwise function we have selected now:
 
 <a name="4.1 MASS package"></a>
 ### 4.1 MASS package
-SRA can be performed forwards and backwards. **Forward** selection is a *bottom-up* approach where you start with no predictors and search through the single-variable models and then add variables, until we find the best model. **Backward** selection is the opposite approach. All predictors are included into the model and the predictors with the least statistical significance are dropped until the model with the lowest AIC is found. 
+SRA can be performed forwards and backwards. **Forward** selection is a *bottom-up* approach wich starts with no predictors and searches through the single-variable models and then adds variables, until the best model is found. **Backward** selection is the opposite approach. All predictors are included into the model and the predictors with the least statistical significance are dropped until the model with the lowest AIC is found. 
 
-> **_NOTE:_** *Forward stepwise selection is usually more suitable when the number of variables is bigger than the sample size.*
+> **_NOTE:_** *Forward stepwise selection is usually more suitable when the number of variables is high in relation to the sample size.*
 
 Most R SRA packages include a function for **both**, where selection carried out in both directions. This is what we will use here. 
 Including `trace = TRUE prints out all the steps that R performs. 
@@ -384,7 +384,7 @@ log.ht ~ temp + rain + LAI
 - rain        1    9.0676 394.60 148.82
 - temp        1   29.4364 414.97 157.48
 ```
-You can see that the last model does not improve any further, so the SRA is finished. The MASS SRA comes to the same conclusion as we did: The variables that best predict plant height are temperature, rain and Leaf area index.  
+You can see that the last model does not improve any further, so the SRA is finished. The MASS SRA comes to the same conclusion as we did during HRA: The variables that best predict plant height are temperature, rain and Leaf area index.  
 
 <a name="4.1 olsrr package"></a>
 ### 4.1 olsrr package
@@ -396,7 +396,7 @@ SRA
 ```
 Set `progress = TRUE` and `details = TRUE` to get a full report on the step by step addition and removal of parameters. 
 
-> **_NOTE_**: *Make sure to always have a look at the way and the order the program removed or added parameters, to avoid mistakes.* 
+> **_NOTE_**: *Make sure to always have a look at the way and the order the program removed or added parameters, to avoid models beeing missed out or unnessary parameter additions.* 
 
 Calling the function shows us a long outputs table detailing the step by step comparison process. I am just showing the last step, where the final model was determined. The function also return a model sumary and an ANOVA table for the final model.   
 ```
