@@ -229,6 +229,7 @@ model.1     3 671.2654
 The AIC of `model.1` is significantly smaller than that of the null model, so we can keep temperature and add more parameters: 
 
 > **_NOTE_**: *When comparing the AICs of models, a difference greater than two units is usually considered a significant difference.*
+
 ```
 # Add on to the model
 model.2 <- lm(log.ht ~ temp + rain, data=traits)                # Include rain
@@ -242,6 +243,7 @@ model.8 <- lm(log.ht ~ temp + rain + hemisphere + LAI + alt + NPP + isotherm, da
 
 AIC(model.null, model.1, model.2, model.3, model.4, model.5, model.6, model.7, model.8)            
 ```
+
 > **_NOTE_**: *While it is generally better to keep the number of predictors as low as possible to avoid overfitting, a general rule to determine the maximum number of predictors used is the `rule of ten´: you should have at least 10 times as many data points as parameters you are trying to estimate.*  
 
 After we have build all the models we want to evaluate, we check their AIC to determine which parameters should be kept and which do not add to the power of the model. 
