@@ -153,9 +153,7 @@ Models can be compared using a range of different criteria, such as R2, AIC, AIC
 **Selection Criteria**  
 
 **R-squared (R2)** *quantifies the  amount of variation in the dependent variable that can be explained by independent variables in a regression model. It is calculated as:*  
-
-<img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png">
-
+<img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png">  
 *Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.  
 Drawbacks of R2 values include that they do not indicate bias in predictions and are susceptible to overfitting and data mining. They always need to be examined in combination with residual plots!  
 To learn more about the adjusted R2 and how to use it, you can read [this blogpost]( https://statisticsbyjim.com/regression/interpret-adjusted-r-squared-predicted-r-squared-regression/).*
@@ -456,7 +454,7 @@ plot(SRA)
 ```
 ![SRA](https://user-images.githubusercontent.com/91228202/145302803-7b022b17-3eca-4274-9c01-db322c0441ce.png)  
 
-*Figure 4. Stepwise Regression Analysis to determine best subset for plant height.*
+*Figure 4. Stepwise Regression Analysis to determine best predictors for plant height.*
 
 This function comes to the same conclusion as the `MASS` package and the HRA.  
 But remember: After computing a SRA the residuals of the resulting model have to be checked and you should always consider the output in the light of you knowledge of the studies background. 
