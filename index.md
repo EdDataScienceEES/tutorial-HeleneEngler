@@ -31,7 +31,7 @@
 <a name="1. Introduction"></a>
 ## 1. Introduction
 
-This tutorial is designed for R users who want to learn how to use **hierarchical and stepwise regression analysis**, to **identify significant and powerful predictors** influencing your explanatory variable from a bigger number of potential variables. 
+This tutorial is designed for R users who want to learn how to use **hierarchical and stepwise regression analysis**, to **identify significant and powerful predictors**, influencing your explanatory variable, from a bigger number of potential parameters. 
 
 <a name="1.1 Learning Outcomes"></a>
 ### 1.1 Learning Outcomes 
@@ -40,15 +40,15 @@ This tutorial is designed for R users who want to learn how to use **hierarchica
 **3. Step-by-step introduction to performing Hierarchical Regression Analysis.**  
 **4. Learn what Stepwise Regression Analysis is and when to use it.**  
 **4. Compute a simple Stepwise Regression Analysis.**  
-**5. Advantages and Drawbacks of Hierarchical and Stepwise Regression Analysis, when to use them and when not to.**   
+**5. Advantages and Drawbacks of Stepwise Regression Analysis, when to use it and when not to.**   
 
 <a name="1.2 Required Skills"></a>
 ### 1.2 Required Skills 
-To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant [Coding Club tutorials](https://ourcodingclub.github.io/tutorials.html) linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as [ANOVA](https://ourcodingclub.github.io/tutorials/anova/) and [linear modelling in R](https://ourcodingclub.github.io/tutorials/model-design/), before attempting these slightly more advanced statistical tests. 
+To complete this tutorial some basic knowledge about building statistical models and using R is required. If you have no experience with using R and the basics of data manipulation and visualisation yet, please familiarize yourself with the program first, to get the most out of the tutorial. You can have a look at the relevant [Coding Club tutorials](https://ourcodingclub.github.io/tutorials.html) linked to these topics. You should also be comfortable with performing and evaluating simple statistical tests, such as [ANOVA](https://ourcodingclub.github.io/tutorials/anova/) and [linear modelling in R](https://ourcodingclub.github.io/tutorials/model-design/), before attempting these slightly more advanced statistics. 
 
 > **_NOTE:_** *All the material you need to complete this tutorial can be downloaded from [this repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler). Click on `Code` / `Download ZIP`and downloand and unzip the folder, or clone the repository to your R studio.*
 
-The following script for HRA can be run by just using basic R. you might want to use the `tidyverse` library to clean the data and make some processing easier, but you dont have to. For the Stepwise regression analysis we will be using the `MASS` and the `olsrr` libraries. You should load/install them at the beginning od your script. 
+The following script for HRA can be run by just using basic R. you might want to use the `tidyverse` library to clean the data and make processing easier, but you don´t have to. For the Stepwise regression analysis we will be using the `MASS` and the `olsrr` libraries. You should load/install them at the beginning of your script. 
 
 ```
 # Loading required R packages ----
@@ -64,11 +64,12 @@ library(MASS)       # Stepwise regression analsysis
 
 <a name="2. From linear models to hierarchical regression analysis"></a>
 ## 2. From linear models to hierarchical regression analysis
-The relationship between a dependent (or response) variable and an independent variable (also called 'predictors', 'covariates', 'explanatory variables' or 'features') can be estimated/modelled with regression analysis. Linear regression is used to find a linear line which fits the most data points according to a specific mathematical criterion. This can help us understand and predict the behaviour of complex systems or analyse observational and experimental data.
+The relationship between a dependent (or response) variable and an independent variable (also called 'predictors', 'covariates', 'explanatory variables' or 'features') can be estimated or modelled with regression analysis. Linear regression is used to find a linear line which fits the most data points according to a specific mathematical criterion. This can help us understand and predict the behaviour of complex systems or analyse observational and experimental data.
 
 However, linear models only describe the relationship between one dependent and one independent variable. This can be especially limiting in environmental systems, where most processes or observations are influenced by a variety of different factors. This is where multiple regression comes in: **multiple linear regressions** can give a line of best fit to predict the relationship of a dependent and multiple independent variables. 
-While this allows the exploration of many factors that may influence a dependent variable, such models can become increasingly more complex, as more and more explanatory variables are added. When [interactions](https://en.wikipedia.org/wiki/Interaction) or [polynomials](https://en.wikipedia.org/wiki/Polynomial) are included, things can become exceedingly. Thus it is important to identify the parameters which actually influence the dependent variable and make a statistically significant contribution to our model.
-While this selection process should always be based on **scientific reasoning** and an **understanding of the theory of the systems** studied, there are statistical methods that can help us with the selection process based on statistical criteria: Once a sensible subset of parameters has been narrowed down, hierarchical regression analysis (HRA), can be used to compare successive regression models and to determine the significance that each one has above and beyond the others. This tutorial will explore how the basic HRA process can be conducted in R. 
+While this allows the exploration of many factors that may influence a dependent variable, such models can become increasingly more complex, as more and more explanatory variables are added. When [interactions](https://en.wikipedia.org/wiki/Interaction) or [polynomials](https://en.wikipedia.org/wiki/Polynomial) are included, things can become exceedingly convoluted. Thus it is important to identify the parameters which actually influence the dependent variable and make a statistically significant contribution to our model.
+While this selection process should always be based on **scientific reasoning** and an **understanding of the theory of the systems** studied, there are statistical methods that can help us with the selection process based on statistical criteria: Once a sensible subset of parameters has been narrowed down, hierarchical regression analysis (HRA), can be used to compare successive regression models and to determine the significance that each one has above and beyond the others. 
+This tutorial will explore how the basic HRA process can be conducted in R. 
 
 > **_NOTE:_** *Do not confuse hierarchical regression analysis with hierarchical modelling. Hierarchical modelling is a type of “multi-level modeling” which is used to model data with a nested structure.*
 
@@ -79,7 +80,7 @@ While this selection process should always be based on **scientific reasoning** 
 ### 3.1 Setting a Research Question  
 Determining a research question and setting a hypothesis before the statistical analysis of your data is always imperative for good science. It ensures a structured, focused work flow and reduces the risk of *researcher bias* and *significance chasing* (=  the misuse of data analysis to find patterns in data that can be presented as statistically significant, which increases type 1 errors). 
 
-In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen from around the world and some connected environmental information, such as the locations rainfall, average temperature or the leaf areas indey measured at the plants location. You can download the plant_traits CSV file [here](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/blob/master/Inputs/plant_traits.csv) and import it into a new R script. 
+In this tutorial we will analyse a data on plant traits collected around the world. The data set includes height meaurements of several plant specimen and some connected environmental information, such as the locations rainfall, average temperature or the leaf area index measured at the plants location. You can download the plant_traits CSV file [here](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/blob/master/Inputs/plant_traits.csv) and import it into a new R script.  
 A bit of preliminary analysis shows that the plant traits data set contains 18 observations (including plant height) for 178 different plant specimen. 
 
 ```
@@ -97,7 +98,7 @@ Because HRA is used to find the best subset of predictors it is usually advisabl
 > **_NOTE:_** *A **directional hypothesis** includes a positive or negative prediction of the relationship, change or difference  between the studies dependent and independent variables. An example for the plant traits data would be e.g.: There is a significant positive relationship between temperature and plant height. 
 > A **Non-directional hypothesis** also makes a prediction of the relationship, change or difference, but does not include what that relationship is exactly. E.g. There is a significant relationship between temperature and plant height.*
 
-Our **research goal** is to identify the best predictors for plant height out of the 35 possible predictor variables included in the data set. A non-directional research intention could be frased as: *The best subset of parameters influencing/ predicting plant height will be identified.*
+Our **research goal** is to identify the best predictors for plant height out of the 17 possible predictor variables included in the data set. A non-directional research intention could be frased as: *The best subset of parameters influencing/predicting plant height will be identified.*
 
 <a name="3.2 Checking assumptions"></a>
 ### 3.2 Checking assumptions  
@@ -123,14 +124,15 @@ hist(traits$height, breaks = 10) # non normal distribution, right skew
 
 *Figure 1. Distribution of plant height(m).*
 
-We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which removes oftentimes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. (2014) in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository).  
-
-
+We can see that the data is not normally distributed, but strongly right skewed. To deal with this we can log the data, which oftentimes removes skewdness (if you want to know more about what log transformation does to your data and why it removes a skew, you can read the paper by Feng at al. (2014) in the [literature folder](https://github.com/EdDataScienceEES/tutorial-HeleneEngler/tree/master/Literature) of the connected repository).  
+Create e new collum (using the `mutate()` function) with the log transformed height data and give it a simple but recognizable name (e.g. `log.ht`). 
 ```
-# Log transforming data, to achieve normal distribution
+# Log transforming data, to achieve normal distribution (using the tidyverse library)
 traits <-  traits %>%
   mutate(log.ht = log(height))   #create new collum with log[height]
-
+```
+Now we can check the distribution of the log data. 
+```
 # Check log distribtuion 
 hist(traits$log.ht, breaks = 10) # close to normal
 ```
@@ -139,13 +141,13 @@ hist(traits$log.ht, breaks = 10) # close to normal
 
 *Figure 2. Distribution of log[plant height(m)].*
 
-While the data still does not look perfectly normally distributed it should be fine for modelling. Perfect normal distributions are rare in environmental data and linear models are not that sensitive to slight abnormalities in distribution. However, it is important to check the residuals of the model we will build, to be able to prove the validity of your statistical method. 
+While the data still does not look perfectly normally distributed it should be fine for modelling. Perfect normal distributions are rare in environmental data and the simple linear models we will use in this tutorial are not that sensitive to slight abnormalities in distribution. However, it is important to check the residuals of the model we will build, to be able to prove the validity of your statistical method. 
 
 > **_NOTE:_** *If you are not familiar with the different types of distributions, have a look at this [website](https://www.itl.nist.gov/div898/handbook/eda/section3/eda366.htm) or this [CC turotial](https://ourcodingclub.github.io/tutorials/modelling/).* 
 
 <a name="3.3 Selection Approach"></a>
 ### 3.3 Selection Approach 
-Models can be compared using a range of different criteria, such as R2, AIC, AICc, BIC or others. It is important to consider your data and the goal of your model when choosing a selection criterion. measure of fit
+Models can be compared using a range of different criteria, such as R2, AIC, AICc, BIC or others. It is important to consider your data and the goal of your model when choosing a selection criterion. 
 
 ---
 **Selection Criteria**  
@@ -155,31 +157,31 @@ Models can be compared using a range of different criteria, such as R2, AIC, AIC
 <img width="211" alt="image" src="https://user-images.githubusercontent.com/91228202/145270140-be4306be-a75a-41fb-9761-482c654c1bf5.png">
 
 *Usually a higher R2 is better, as it indicates a higher degree of variation is explained by the model. R2 only works for simple linear models. For multiple regression, where several independent variables are used, the **adjusted R-squared** should be used, as the R2 does not penalize overfitting and keeps increasing with every additional parameter. The adjusted R2 is able to deal with multiple parameters and will not increase if an additional parameter does not add predictive power.  
-Drawbacks of R2 values include that it does not indicate bias in predictions and is susceptible to overfitting and data mining. It always needs to be examined in combination with residual plots! 
+Drawbacks of R2 values include that they do not indicate bias in predictions and are susceptible to overfitting and data mining. They always need to be examined in combination with residual plots! 
 To learn more about the adjusted R2 and how to use it, you can read [this blogpost]( https://statisticsbyjim.com/regression/interpret-adjusted-r-squared-predicted-r-squared-regression/).*
 
 **Akaike information criterion (AIC)** *can be used to determine the relative predictive power and goodness of model fit though an estimation of error. Its value indicates the quality of a model relative to other models in a set. A smaller AIC is usually better, however an AIC value cannot be considered out of context. The AIC value alone does not give an indication of the model quality, but is only useful when compared to related models. It estimates the amount of information lost from a model and includes trade-offs between goodness of fit  and the simplicity of the model. Thus, one of the great benefits of the AIC is that it penalizes overfitting and the addition of more parameters. 
 For models with small sample sizes the AIC often selects models with too many parameters (overfitting). Thus the **AICc**, which is an AIC with a correction for small sample sizes, should be used when modelling small sample sizes. It invokes a greater penalty than AIC for each additional parameter estimated, which offers greater ‘protection’ against overfitting.* 
 
 **Bayesian information criterion (BIC)** *is calculated similarly to the AIC. To decide which of the two to use we can generally ask what is our goal for model selection:* 
--	*Find the model that gives the best prediction (without assuming that any of the models are correct) use AIC*  
--	*Find the **true model**, with the assumptions that fit reality closest, use BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into this)*
+-	*If you want to find the model that gives the best prediction (without assuming that any of the models are correct), use the AIC*  
+-	*If you want to find the **true model**, with the assumptions that fit reality closest, use the BIC (there is of course the question: what is true and how do we define the reality we are looking for, but let´s not get into that)*
 
 ---
 
-It is often good practice to include both the AIC and the BIC into your model selection process and compare their evaluation of the model. However for simplicity's sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. 
+It is often good practice to include both the AIC and the BIC into the model selection process and compare their evaluation of the model. However for simplicity's sake we will use the AIC, which is easily computed and interpreted in R and includes a penalisation for **overparameterization**. For the simple models we are using the AIC and the BIC are unlikely to differ in any case. 
 
 <a name="3.4 Model Creation"></a>
 ### 3.4 Model Creation 
 #### Null Model
-A null model (also called intercept only model) is the simplest possible model. It should always be the first model in a HRA, especially when using the AIC. It can be used as a baseline to test if the change in predictive power through the addition of an explanatory variable is significantly different from zero: 
+A null model (also called intercept only model) is the simplest possible model. It should always be the first model constructed in a HRA, especially when using the AIC. It can be used as a baseline to test if the change in predictive power through the addition of an explanatory variable is significantly different from zero: 
 
 ```
 ## Null model 
 model.null <- lm(log.ht ~ 1, data=traits)
 ```
 #### Add variables  
-Let´s start with a simple model using only one parameter. The manual addition of parameters has to be based on scientific, ecological reasoning: What variable is most likely to influence plant height? Temperature and rain are very likely to have a significant impact on plant height. So the first addition is temperature: 
+Let´s start with a simple model using only one parameter. The addition of parameters has to be based on scientific, ecological reasoning: What variable is most likely to influence plant height? Temperature and rain are very likely to have a significant impact on plant height. So the first addition is temperature: 
 
 ```
 # Simple univariate model
@@ -224,8 +226,9 @@ This returns the AIC of the null model and `model.1`.
 model.null  2 719.5867
 model.1     3 671.2654
 ```
-The AIC of `model.1` is smaller than that of the null model, so we can keep temperature and add more parameters: 
+The AIC of `model.1` is significantly smaller than that of the null model, so we can keep temperature and add more parameters: 
 
+> **_NOTE_**: *When comparing the AICs of models, a difference greater than two units is usually considered a significant difference.*
 ```
 # Add on to the model
 model.2 <- lm(log.ht ~ temp + rain, data=traits)                # Include rain
