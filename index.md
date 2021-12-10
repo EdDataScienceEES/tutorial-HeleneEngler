@@ -210,7 +210,7 @@ To test the normality of the residuals a Shapiro-Wills test may be performed. Th
 
 > **_NOTE:_** *Usually the interpretation of residuals is described in a lot less detail and you **NEVER** include the residual plots. In a paper or report you would just say: The residuals were normally distributed. However, they can be quite tricky to understand. This [website](https://rpubs.com/iabrady/residual-analysis) shows some good examples and explains the interpretation of residuals nicely.*
 
-Now we can compare `model.1 to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
+Now we can compare `model.1` to the null model, to see if the addition of temperature made a significant improvement to the models predictive power and if it is worth keeping in the model: 
 
 ```
 # Check predcitive power 
