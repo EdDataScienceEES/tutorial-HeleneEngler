@@ -398,7 +398,7 @@ Set `progress = TRUE` and `details = TRUE` to get a full report on the step by s
 
 > **_NOTE_**: *Make sure to always have a look at the way and the order the program removed or added parameters, to avoid models beeing missed out or unnessary parameter additions.* 
 
-Calling the function shows us a long outputs table detailing the step by step comparison process. I am just showing the last step, where the final model was determined. The function also return a model sumary and an ANOVA table for the final model.   
+Calling the function shows us a long outputs table detailing the step by step comparison process. I am just showing the last step, where the final model was determined. The function also returns a summary and an ANOVA table for the final model.   
 ```
 Step 5 : AIC = 636.9401 
  log.ht ~ temp + rain + LAI 
@@ -448,7 +448,7 @@ Total         563.477        171
         LAI     0.255         0.140        0.179     1.816    0.071    -0.022     0.532 
 ----------------------------------------------------------------------------------------
 ```
-We can visualise the change in AIC for each step with the ´plot()´ function. 
+We can visualise the change in AIC (and the other criteria computed) for each step with the ´plot()´ function. 
 ```
 plot(SRA)
 ```
@@ -462,8 +462,8 @@ But remember: After computing a SRA the residuals of the resulting model have to
 <a name="5. HRA and SRA: Advantages and Drawbacks"></a>
 ## 5. HRA and SRA: Advantages and Drawbacks 
 
-HRA has the advantage that it allows you to decide which parameters to include at what stage, based on scientific reasoning. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling. 
-While SRA is one of the most common methods used in ecological and environmental studies, it has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006). 
+HRA has the advantage that it allows you to decide which parameters to include at what stage, based on scientific reasoning. However, if there is a large subset of parameters, this is can be quite time consuming. SRA simplifies the process and provides the ability to manage large amounts of potential predictor variables, fine-tuning the model to choose the best predictor variables from the available options. 
+While SRA is one of the most common methods used in ecological and environmental studies that employ regressions, it has many drawbacks and in recent years there has been a call to abandon the method altogether (Wittingham et al., 2006). 
 
 Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered when you are evaluating your results are: 
 -	**Parameter bias**: parameter selection is based on testing whether parameters are significantly different from zero, this can lead to biases in parameters, over-fitting and incorrect significance tests. (You could see that with the SRA performed using the olsrr package.)  
@@ -477,11 +477,12 @@ Some of the drawbacks of SRA (Wittingham et al., 2006) that should be considered
 -	The use of p-values, F and Chi-squared tests and R2 values in SRA is problematic and may not present the actual statistical significance of parameters.   
 
 Thus, SRA should only be used cautiously! 
-However, it is easily computed (now that you know how to) and may provide some supplementary insights into the data you are exploring. 
+However, it is easily computed (now that you know how to) and may provide some supplementary insights into the data you are exploring. The process of SRA can be used to gain information about the quality of the predictor, even if the end result is not used for modelling. 
+If you are interested in reading more about current thoughts on SRA, its problems and alternatives in ecological statistics, I recommend you read the Wittingham et al.(2006) paper that can be found in the resources folder of this tutorial on GitHub. 
 
 <a name="6. Challenge"></a>
 ## 6. Challenge
-If you haven’t had enough of HRA and SRA yet, you can try yourself at a data set from the [Data World](https://data.world) and find the best parameters to predict life expectancy. The data set, a starter script and solutions can be found in the linked [Github repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler). 
+If you haven’t had enough of HRA and SRA yet, you can try yourself at a data set from the [Data World](https://data.world) and find the best parameters to predict life expectancy. The data set and a solution script can be found in the linked [Github repository](https://github.com/EdDataScienceEES/tutorial-HeleneEngler). 
 
 <a name="7. Supplementary material "></a>
 ## 7. Supplementary material 
